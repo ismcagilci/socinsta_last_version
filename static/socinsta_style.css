@@ -1,0 +1,68 @@
+#contact #name,#contact #email,#contact #surname,#contact #gsm_no,#contact #textarea1{
+    background-color: white;
+    border: 1px solid;
+}
+
+#contact-us #contact_header{
+    background-color: white;
+}
+
+#filterss input{
+    text-align: center;
+}
+
+
+#card_general{
+    background: linear-gradient(45deg, #6a3232, #741ca7);
+}
+
+.card-assistant-button{
+    background: linear-gradient(45deg,#043f6c, #c64dd9);
+    border-radius: 500px !important;
+}
+
+h2#navbar-brand{
+    color:white;
+    font-weight:700
+
+}
+
+@media screen and (max-width: 992px) {
+#landing-logo-img{
+    max-width: 40%;
+}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+    #landing-logo-img{
+        max-width: 35%;
+    }
+    #nav .nav-item{
+        margin-right: 10px;
+    }
+    .ml-auto, .mx-auto{
+        margin-left: 0px;
+    }   
+
+    h2#navbar-brand{
+        color:#5a5a5a
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #landing-logo-img{
+        max-width: 30%;
+        padding-bottom: 3px;
+
+    }
+    #nav .nav-item{
+        margin-right: 20px;
+    }
+
+    }
+    
+
+
+
+
+

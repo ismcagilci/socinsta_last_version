@@ -1,0 +1,6 @@
+django==2.2
+celery
+git+https://git@github.com/ismcagilci/instagram_private_api
+django_celery_results
+django_celery_beat
+requests

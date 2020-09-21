@@ -1,0 +1,9 @@
+venv
+db.sqlite3
+aristo.__pycache__
+instagram.__pycache__
+payment.__pycache__
+aristo.migrations
+instagram.migrations
+payment.migrations
+socinsta

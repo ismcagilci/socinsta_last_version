@@ -1,0 +1,425 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> {% include 'includes/meta_tags.html' %}
+    <link rel="apple-touch-icon" href="../../../app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/vendors.min.css' %}">
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/materialize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/sweetalert/sweetalert.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'socinsta_style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- END: Page Level CSS-->
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/custom/custom.css' %}">
+    <!-- END: Custom CSS-->
+</head>
+<!-- END: Head-->
+
+<body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu 2-columns  " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    {% include "includes/navbar_login.html" %}
+    <!-- END: Header-->
+
+    <!-- BEGIN: SideNav-->
+    <aside class="sidenav-main nav-collapsible sidenav-light sidenav-active-rounded nav-collapsed">
+        {% include 'includes/navbar_icon.html' %}
+        <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+            <div class="collapsible-body" style="display: block;">
+                <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                    <li><a class="collapsible-body" href="/landing" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">help_outline</i><span>Socinsta Nedir?</span></a>
+                    </li>
+                    <li><a class="collapsible-body" data-i18n="" href="/pricing"><i class="material-icons" style="font-size: 25px">style</i><span>Paketler</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/dashboard" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">trending_up</i><span>Dashboard</span></a>
+                    </li>
+                    <li class="active"><a class="collapsible-body active" href="/profile" data-i18n=""><i class="material-icons" style="font-size: 25px">account_box</i><span>Hesaplarım</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/assistants_details" data-i18n=""><i class="material-icons" style="font-size: 25px">done_all</i><span>Yapılan işlemler</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/select_assistant" data-i18n=""><i class="material-icons" style="font-size: 25px">group_work</i><span>Asistanlar</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/contact" data-i18n=""><i class="material-icons" style="font-size: 25px">message</i><span>İletişim</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/logout" data-i18n=""><i class="material-icons" style="font-size: 25px">power_settings_new</i><span>Çıkış Yap</span></a>
+                    </li>
+                </ul>
+            </div>
+        </ul>
+
+        {% include 'includes/navbar_menu.html' %}
+    </aside>
+    <!-- END: SideNav-->
+
+    <!-- BEGIN: Page Main-->
+    <div id="main" class="main-full">
+        <div class="row">
+            <h4 class="header center-align">HESAP ANALİZİ</h4>
+            <div class="col s12 center-align">
+                <div class="card-alert card gradient-45deg-purple-deep-orange border-round animate fadeRight">
+                    <div class="card-content white-text">
+                        <p>
+                            <i class="material-icons">person</i> KULLANICI : {{user}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m4 l4">
+                    <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3 animate fadeLeft">
+                        <div class="card-content center">
+                            <img src="{% static 'app-assets/images/icon/apple-watch.png' %}" alt="" class="width-40">
+                            <h5 class="white-text lighten-4">Kalan süre </h5>
+                            <p class="white-text lighten-4">{{license_data.remaining_time}} gün</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card gradient-shadow gradient-45deg-red-pink border-radius-3 animate fadeUp">
+                        <div class="card-content center">
+                            <img src="{% static 'app-assets/images/icon/printer.png' %}" alt="" class="width-40">
+                            <h5 class="white-text lighten-4">Sürüm</h5>
+                            <p class="white-text lighten-4">{{license_data.package_name}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4 l4">
+                    <div class="card gradient-shadow gradient-45deg-amber-amber border-radius-3 animate fadeRight">
+                        <div class="card-content center">
+                            <img src="{% static 'app-assets/images/icon/laptop.png' %}" alt="" class="width-40">
+                            <h5 class="white-text lighten-4">Bağlı hesap sayısı</h5>
+                            <p class="white-text lighten-4">{{ig_accounts|length}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- User Post Feed -->
+            <section id="instagram_accounts">
+                <div id="card-panel-type1" class="section">
+                    <h4 id='accounts' class="header center-align">İNSTAGRAM HESAPLARIM</h4>
+                    <div class="row">
+    
+                        {% for i in ig_accounts %}
+    
+                        <div class="col s12 m6 l4 card-width">
+                            <div class="card card-border center-align animate fadeUp" id="card_general">
+                                <div class="card-content white-text">
+                                    <img class="responsive-img circle z-depth-4" width="100" src={{i.profile_pic_url}} alt="">
+                                    <h5 class="white-text mb-1">@{{i.username}}</h5>
+    
+                                    <br>
+                                    <div class="row">
+                                        <div class="col l4 s4" style="padding: 0 .50rem">
+                                            <p>Takipçi</p>
+                                            <p>{{i.follower_count}}</p>
+                                        </div>
+                                        <div class="col l4 s4" style="padding: 0 .50rem">
+                                            <p>Takip edilen</p>
+                                            <p>{{i.following_count}}</p>
+    
+                                        </div>
+                                        <div class="col l4 s4" style="padding: 0 .50rem">
+                                            <p>Gönderi sayısı</p>
+                                            <p>{{i.media_count}}</p>
+                                        </div>
+    
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col l6 s6 center-align">
+                                            <a class=" btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem" href="/dashboard">Analiz
+                                      </a>
+                                        </div>
+    
+                                        <div class="col l6 s6 center-align">
+                                            <form action="/delete_ig_account" method="POST">
+                                                {% csrf_token %}
+                                                <input name='ig_account' value={{i.username}} style="display:none"></input>
+                                                <button class="btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem" type="submit"> KALDIR
+                                                </button>
+                                            </form>
+                                        </div>
+    
+                                    </div>
+    
+                                    <div class="row mt-3">
+    
+                                        <div class="col s4 m4 l4 card-width">
+                                            <div class="card card-assistant-button">
+                                                <div class="card-content center-align" style="padding: 16px">
+    
+                                                    <div class="row">
+    
+                                                        {% if assistants_list.0 == 1 %}
+                                                        <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
+                                                        <a href="/select_assistant">
+                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                        </a>
+    
+                                                        {% endif %}
+    
+                                                    </div>
+    
+                                                    <div class="row">
+                                                        <p class="white-text lighten-4">Takip</p>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s4 m4 l4 card-width">
+                                            <div class="card card-assistant-button">
+                                                <div class="card-content center-align" style="padding: 16px">
+                                                    <div class="row">
+                                                        {% if assistants_list.1 == 1 %}
+                                                        <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
+                                                        <a href="/select_assistant">
+                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                        </a>
+    
+                                                        {% endif %}
+    
+                                                    </div>
+    
+                                                    <div class="row">
+                                                        <p class="white-text lighten-4">Beğeni</p>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s4 m4 l4 card-width">
+                                            <div class="card card-assistant-button">
+                                                <div class="card-content center-align" style="padding: 16px">
+                                                    <div class="row">
+    
+                                                        {% if assistants_list.2 == 1 %}
+                                                        <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
+                                                        <a href="/select_assistant">
+                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                        </a>
+    
+                                                        {% endif %}
+    
+                                                    </div>
+    
+                                                    <div class="row center-align">
+                                                        <p class="white-text lighten-4">Yorum</p>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                    </div>
+    
+                                </div>
+                            </div>
+                        </div>
+    
+                        {% endfor %}
+    
+                        <div class="col s12 m6 l4 card-width">
+    
+                            <div id='hesapekle1' class="card card-border animate fadeUp" style="display:{{wow2}}">
+                                <div class="card-content center-align">
+                                    <div style="margin-top:182px; margin-bottom:125px;">
+                                        <div class="row">
+    
+                                            <a onclick='add_account()' href='#hesapekle1'>
+                                                <i class="material-icons white-text  small-ico-bg mb-5" style='background-color:#12a1d3'>add</i>
+    
+                                            </a>
+                                        </div>
+    
+                                        <div class="row">
+                                            <p>Yeni Hesap Ekle</p>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+    
+                            <div id="hesapekle2" class="card card card-default scrollspy animated zoomIn" style="display: {{wow}}">
+    
+                                <div class="card-content">
+    
+                                    <div class="card-alert card gradient-45deg-purple-deep-orange">
+                                        <div class="card-content white-text center-align">
+                                            <p>
+                                                <i class="material-icons">notifications</i> İnstagram hesabınızı ekleyin</p>
+                                        </div>
+                                    </div>
+    
+                                    <form method="POST" action="/add_insta_account" class="col s12">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="input-field">
+                                                <i class="material-icons prefix active">account_circle</i>
+                                                <input disabled="" value="{{ig_user}}" id="disabled" type="text" class="validate" style="display: {{ig_username_disabled}};"> {% if ig_username_disabled == "block" %}
+                                                <input name="instagram_username" value="{{ig_user}}" type="text" style="display: {{ig_username}};"> {% else %}
+                                                <input name="instagram_username" id="name3" type="text" style="display: {{ig_username}};"> {% endif %}
+    
+                                                <label for="name3">Kullanıcı Adı</label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="input-field">
+                                                <i class="material-icons prefix active">lock_outline</i>
+                                                <input disabled="" value="{{ig_user_password}}" id="disabled2" type="password" class="validate" style="display: {{ig_username_disabled}};"> {% if ig_username_disabled == "block" %}
+                                                <input name="instagram_password" value="{{ig_user_password}}" type="password" style="display: {{ig_username}};"> {% else %}
+                                                <input name="instagram_password" id="password4" type="password" style="display: {{ig_username}};"> {% endif %}
+    
+                                                <label for="password4">Şifre</label>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="display: {{sms_or_mail}};">
+                                            <p class="center-align">Lütfen onay yöntemini seçiniz!</p>
+                                            <br>
+                                            <div class="col l6 s6 m6">
+                                                <p>
+                                                    <label>
+                                                        <input name="mail" type="checkbox">
+                                                        <span>Mail ile onay</span>
+                                                    </label>
+                                                </p>
+                                                <p>
+                                            </div>
+                                            <div class="col l6 s6 m6">
+                                                <label>
+                                                    <input name="sms" type="checkbox">
+                                                    <span>Sms ile onay</span>
+                                                </label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="display: {{challenge_code}}">
+                                            <div class="input-field">
+                                                <i class="material-icons prefix active">account_circle</i>
+                                                <input name="challenge_code" id="name3" type="text">
+                                                <label for="name3">Onay kodu</label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row center-align">
+                                            <div class="input-field col s12 col l12">
+    
+                                                <button class="btn cyan waves-effect waves-light " type="submit">Hesap ekle
+                                                    <i class="material-icons right">send</i>
+                                                </button>
+    
+                                            </div>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </section>
+            
+            <!-- START RIGHT SIDEBAR NAV -->
+
+            <!-- START RIGHT SIDEBAR NAV -->
+
+            <body onload="{{pop_up}}">
+
+                <script>
+                    function confirmation_message() {
+                        swal("Başarıyla üye oldunuz!", "Hesap ekle kısmından instagram hesabınızı ekleyerek hemen başlayabilirsiniz...", "success")
+                    }
+
+                    function payment_success() {
+                        swal("Ödeme Başarılı!", "{{package_name}}iniz hesabınıza tanımlanmıştır. İnstagram hesabınızı ekleyerek kullanmaya başlayabilirsiniz.", "success")
+                    }
+
+                    function payment_failed() {
+                        swal("Ödeme Doğrulanamadı", "Bir sorun olduğunu düşünüyorsanız lütfen bizimle iletişime geçiniz.", "error")
+                    }
+
+                    function account_verification() {
+                        swal("Başarıyla üye oldunuz!", "Lütfen mailinize gelen aktivasyon koduyla hesabınızı aktifleştiriniz...", "success")
+                    }
+
+                    function verification_completed() {
+                        swal("Hesabınız başarıyla onaylandı", "Hesap ekle kısmından instagram hesabınızı ekleyerek hemen başlayabilirsiniz...", "success")
+                    }
+
+                    function confirmation_message2() {
+                        swal("Başarıyla giriş yaptınız.", "Hoşgeldiniz", "success")
+                    }
+
+                    function confirmation_message3() {
+                        swal("Başarıyla giriş yaptınız.", "Lütfen mailinize gelen aktivasyon koduyla hesabınızı aktifleştiriniz...", "success")
+                    }
+
+                    function add_insta_account_error(error) {
+                        swal({
+                            title: error,
+                            icon: 'error'
+                        })
+
+                    }
+
+                    function add_insta_account_success(success) {
+                        swal({
+                            title: success,
+                            icon: 'success'
+                        })
+
+                    }
+                </script>
+
+                <!-- END RIGHT SIDEBAR NAV -->
+
+        </div>
+
+    </div>
+    </div>
+    <!-- END: Page Main-->
+
+    <!-- BEGIN: Footer-->
+
+    <!-- END: Footer-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="{% static 'app-assets/js/vendors.min.js' %}" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    <script src="{% static 'app-assets/js/plugins.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/custom/custom-script.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/ui-alerts.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/extra-components-sweetalert.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/customizer.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/vendors/sweetalert/sweetalert.min.js' %}"></script>
+    <script>
+        function add_account() {
+            var x = document.getElementById('hesapekle2');
+            var z = document.getElementById('hesapekle1');
+            x.style.display = "block"
+            z.style.display = "none"
+        }
+    </script>
+
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+    </body>
+
+</html>

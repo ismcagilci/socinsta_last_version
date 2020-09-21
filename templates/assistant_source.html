@@ -1,0 +1,97 @@
+{% load static %}
+{% include 'includes/assistants_default.html' %}
+
+    <!-- END: SideNav-->
+
+    <!-- BEGIN: Page Main-->
+    <div id="main" class="main-full">
+        <div class="row">
+        
+          <div class="col s12">
+            <div class="container">
+              <div class="section">
+                  <div id="card-panel-type" class="section">
+                          
+                      <div class="row mt-2">
+                            <div class="col s12 m6 l4 card-width">
+                                  <div class="card-panel border-radius-6 mt-10 card-animation-1">
+                                      <form action="/select_assistant/" method="post">
+                                        {% csrf_token %}
+                                        <img class="responsive-img border-radius-8 z-depth-4 image-n-margin" src="{% static 'app-assets/images/cards/kisi.jpg' %}" alt="">
+                                        <h5 class="center-align"><a  class="mt-5">Kişi üzerinden işlem</a></h5>
+                                        <p class="center-align">Bu özellik sayesinden seçtiğiniz görevi kişi üzerinden gerçekleştirebilirsiniz. </p>
+                                        <div class="center-align">
+                                        <input name='type' value="{{type}}" style="display:none"></input>
+                                        <input name='source' value="user" style="display:none"></input>
+                                        <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange">BAŞLAT</button>
+                                      </form>
+                                    </div>    
+                                  </div>
+                            </div>
+                            <div class="col s12 m6 l4 card-width">
+                                  <div class="card-panel border-radius-6 mt-10 card-animation-1">
+                                      <form action="/select_assistant/" method="post">
+                                        {% csrf_token %}
+                                        <img class="responsive-img border-radius-8 z-depth-4 image-n-margin" src="{% static 'app-assets/images/cards/hashtag.jpg' %}" alt="">
+                                        <h5 class="center-align"><a  class="mt-5">Hashtag üzerinden işlem</a></h5>
+                                        <p class="center-align">BBu özellik sayesinden seçtiğiniz görevi hashtag üzerinden gerçekleştirebilirsiniz.</p>
+                                        <div class="center-align">
+                                            <input name='type' value="{{type}}" style="display:none"></input>
+                                            <input name='source' value="hashtag" style="display:none"></input>
+                                            <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange">BAŞLAT</button>
+                                       </div>
+                                      </form>
+                                  </div>
+                            </div>
+                            <div class="col s12 m6 l4 card-width">
+                                  <div class="center-align card-panel border-radius-6 mt-10 card-animation-1">
+                                      <form action="/select_assistant/" method="post">
+                                        {% csrf_token %}
+                                        <img class="responsive-img border-radius-8 z-depth-4 image-n-margin" src="{% static 'app-assets/images/cards/lokasyon.jpg' %}" alt="">
+                                        <h5 class="center-align"><a class="mt-5">Lokasyon üzerinden işlem </a></h5>
+                                        <p class="center-align">Bu özellik sayesinden seçtiğiniz görevi lokasyon üzerinden gerçekleştirebilirsiniz.</p>
+                                            <input name='type' value="{{type}}" style="display:none"></input>
+                                            <input name='source' value="location" style="display:none"></input>
+                                            <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange">BAŞLAT</button>
+                                       </div>
+                                      </form>
+                                  </div>
+                            </div>
+                      </div>
+                </div>
+  </div><!-- START RIGHT SIDEBAR NAV -->
+              
+
+
+         
+<!-- START RIGHT SIDEBAR NAV -->
+
+
+
+
+<!-- END RIGHT SIDEBAR NAV -->
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END: Page Main-->
+
+    <!-- BEGIN: Footer-->
+
+    
+
+    <!-- END: Footer-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="{% static 'app-assets/js/vendors.min.js' %}" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    <script src="{% static 'app-assets/js/plugins.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/custom/custom-script.js' %}" type="text/javascript"></script>
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+  </body>
+</html>

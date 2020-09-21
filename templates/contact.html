@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <!-- BEGIN: Head-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% include 'includes/meta_tags.html' %}
+    <link rel="apple-touch-icon" href="../../../app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/vendors.min.css' %}">
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/page-contact.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/materialize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/pricing.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'socinsta_style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+
+    <!-- END: Page Level CSS-->
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/custom/custom.css' %}">
+    <!-- END: Custom CSS-->
+  </head>
+  <!-- END: Head-->
+  <body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu 2-columns  " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    {% if request.user.is_authenticated %}
+    {% include "includes/navbar_login.html" %}
+    {% else %}
+    {% include "includes/navbar_unlogin.html" %}
+    {% endif %}
+    <!-- END: Header-->
+
+
+
+    <!-- BEGIN: SideNav-->
+    <aside class="sidenav-main nav-collapsible sidenav-light sidenav-active-rounded nav-collapsed">
+{% include 'includes/navbar_icon.html' %}
+      
+      {% if request.user.is_authenticated %}
+      <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+        <div class="collapsible-body" style="display: block;">
+          <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+            <li><a class="collapsible-body" href="/landing" data-i18n=""><i class="material-icons" style="font-size: 25px">help_outline</i><span>Socinsta Nedir?</span></a>
+            </li>
+            <li><a class="collapsible-body" data-i18n="" href="/pricing"><i class="material-icons" style="font-size: 25px">style</i><span>Paketler</span></a>
+            </li>
+            <li><a class="collapsible-body" href="/dashboard" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">trending_up</i><span>Dashboard</span></a>
+            </li>
+            <li><a class="collapsible-body" href="/profile" data-i18n=""><i class="material-icons" style="font-size: 25px">account_box</i><span>Hesaplarım</span></a>
+            </li>
+            <li><a class="collapsible-body" href="/assistants_details" data-i18n=""><i class="material-icons" style="font-size: 25px">done_all</i><span>Yapılan işlemler</span></a>
+            </li>
+            <li><a class="collapsible-body" href="/select_assistant" data-i18n=""><i class="material-icons" style="font-size: 25px">group_work</i><span>Asistanlar</span></a>
+            </li>
+            <li class="active"><a class="collapsible-body active" href="/contact" data-i18n=""><i class="material-icons" style="font-size: 25px">message</i><span>İletişim</span></a>
+            </li>
+            <li><a class="collapsible-body" href="/logout" data-i18n=""><i class="material-icons" style="font-size: 25px">power_settings_new</i><span>Çıkış Yap</span></a>
+            </li>
+          </ul>
+        </div>
+    </ul>
+      {% else %}
+      <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+          <div class="collapsible-body" style="display: block;">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li><a class="collapsible-body" href="/landing" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">help_outline</i><span>Socinsta Nedir?</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/pricing" data-i18n=""><i class="material-icons" style="font-size: 25px">style</i><span>Paketler</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">touch_app</i><span>Giriş Yap</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">person_add</i><span>Kayıt Ol</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/forget_password" data-i18n=""><i class="material-icons" style="font-size: 25px">lock</i><span>Şifremi unuttum</span></a>
+                </li>
+                <li class="active"><a class="collapsible-body active" href="/contact" data-i18n=""><i class="material-icons" style="font-size: 25px">message</i><span>İletişim</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/login" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">trending_up</i><span>Dashboard</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">account_box</i><span>Hesaplarım</span></a>
+                </li>
+                <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">group_work</i><span>Asistanlar</span></a>
+                </li>
+              
+            </ul>
+          </div>
+      </ul>
+      {% endif %}
+        
+      
+     {% include 'includes/navbar_menu.html' %}
+    </aside>
+    <!-- END: SideNav-->
+
+    <!-- BEGIN: Page Main-->
+    
+    <div id="main" class="main-full">
+      <div class="row">
+        
+        
+         <!--CLEAR PAGE START-->
+
+         <div id="contact-us" class="section">
+          <div class="app-wrapper">
+            <div class="contact-header">
+              <div class="row contact-us">
+                <div class="col s12 m12 l4 sidebar-title">
+                  <h5 class="m-0"><i class="material-icons contact-icon vertical-text-top black-text">mail_outline</i><p class="black-text">Ayrıntılar
+                      </p> </h5>
+                  <p class="m-0 font-weight-500 mt-6 hide-on-med-and-down text-ellipsis black-text">7/24 destek
+                   </p>
+                  <span class="social-icons hide-on-med-and-down"><i class="fab fa-behance"></i> <i class="fab fa-dribbble ml-5"></i>
+                    <i class="fab fa-facebook-f ml-5"></i> <i class="fab fa-instagram ml-5"></i></span>
+                </div>
+                <div class="col s12 m12 l8 form-header" id="contact_header">
+                  <h6 class="form-header-text"><i class="material-icons"> mail_outline </i> Aklınıza takılan herhangi bir şeyi yada karşılaştığınız herhangi bir sorunu bize iletin.</h6>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Contact Sidenav -->
+            <div id="sidebar-list" class="row contact-sidenav">
+              <div class="col s12 m12 l4">
+                <!-- Sidebar Area Starts -->
+                <div class="sidebar-left sidebar-fixed">
+                  <div class="sidebar">
+                    <div class="sidebar-content">
+                      <div class="sidebar-menu list-group position-relative">
+                        <div class="sidebar-list-padding app-sidebar contact-app-sidebar" id="contact-sidenav">
+                          <ul class="contact-list display-grid">
+                            <li>
+                              <h5 class="m-0">Socinsta iletişim bilgileri</h5>
+                            </li>
+                            <li>
+                              <h6 class="mt-5 line-height">İsteğinize göre site üzerinden yada direk mail yollayabilirsiniz.</h6>
+                            </li>
+                            <li>
+                              <hr class="mt-5">
+                            </li>
+                          </ul>
+                          <div class="row">
+                            <!-- Place -->
+                            
+                            <!-- Mail -->
+                            <div class="col s12 mail mt-4 p-0">
+                              <div class="col s2 m2 l2"><i class="material-icons"> mail_outline </i></div>
+                              <div class="col s10 m10 l10">
+                                <p class="m-0">info@socinsta.com</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <a href="#" data-target="contact-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                      
+                    </div>
+                  </div>
+                </div>
+                <!-- Sidebar Area Ends -->
+              </div>
+              <div class="col s12 m12 l8 contact-form margin-top-contact">
+                <div class="row" id="contact">
+                  <form method="POST" action="/contact/" class="col s12">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="input-field col m6 s12">
+                        <input name="name" id="name" type="text" class="validate" required>
+                        <label for="name">İsim</label>
+                      </div>
+                      <div class="input-field col m6 s12">
+                        <input name="email" id="email" type="email" class="validate" required>
+                        <label for="email">E-mail adresi</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col m6 s12">
+                        <input name="surname" id="surname" type="text" class="validate" required>
+                        <label for="company">Soyisim</label>
+                      </div>
+                      <div class="input-field col m6 s12">
+                        <input name="gsm_no" id="gsm_no" type="number" class="validate">
+                        <label for="budget">Telefon numarası</label>
+                      </div>
+                      <div class="input-field col s12 width-100">
+                        <textarea name="message" id="textarea1" class="materialize-textarea" required></textarea>
+                        <label for="textarea1">Mesajınız</label>
+                        <button type="submit" class="waves-effect waves-light btn">Gönder</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--CLEAR PAGE END -->
+     
+      </div>
+    </div>
+    <!-- END: Page Main-->
+
+    <!-- BEGIN: Footer-->
+
+    
+
+    <!-- END: Footer-->
+    <!-- BEGIN VENDOR JS-->
+     <script src="{% static 'app-assets/js/vendors.min.js' %}" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    <script src="{% static 'app-assets/js/plugins.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/custom/custom-script.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/customizer.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/page-contact.js' %}" type="text/javascript"></script>
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+  </body>
+</html>

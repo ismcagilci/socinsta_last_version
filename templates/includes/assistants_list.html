@@ -1,0 +1,133 @@
+{% for i in linked_assistants %}
+      
+
+      
+{% if i|length == 2 %}
+
+<div class="col s12 m4 l4">
+   <div class="card animate fadeLeft">
+      <div class="card-content">
+         <!-- Dropdown Structure -->
+         
+         <div class="card-alert card gradient-45deg-purple-deep-orange" style="margin-top: 92px">
+               <div class="card-content white-text center-align">
+                 <p>
+                   <i class="material-icons">notifications</i>
+                   {{i.1}} görevi yok,
+                   hemen yeni görev ekle</p>
+               </div>
+         </div>
+             
+         <br>
+         <br>
+         
+          <div class="row center-align">
+               
+               <p><a class="mb-6 mt-3 btn waves-effect waves-light gradient-45deg-green-teal gradient-shadow" href="/select_assistant">{{i.1}} GÖREVİ EKLE</a></p>
+            
+      </div>
+   </div>
+   </div>
+</div>
+
+
+{% else %}
+<div class="col s12 m4 l4">
+        <div class="card animate fadeLeft">
+           <div class="card-content" style="padding: 10px">
+              <h4 class="card-title mb-0">{{i.8}} <a class='dropdown-trigger red-text float-right' href='#' data-target='{{i.9}}'><i class="material-icons float-right">more_vert</i></a> </h4>
+              <!-- Dropdown Structure -->
+                <ul id='{{i.9}}' class='dropdown-content'>
+               
+               {% if i.6 == 3 %}
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="başlat" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn  waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 1.05rem">Başlat</button>
+               </form>
+               {% elif i.6 == 1 or i.6 == 9 %}
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="durdur" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 1.05rem">Durdur</button>
+               </form>
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="sonlandır" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 0.24rem">Sonlandır</button>
+               </form>
+               {% elif i.6 == 2 %}
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="başlat" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 1.05rem">Başlat</button>
+               </form>
+               {% elif i.6 == 0 %}
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="devam_et" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 1.05rem">Devam et</button>
+               </form>
+               <form action="/dashboard/" method="post">
+                  {% csrf_token %}
+                  <input name='type' value="sonlandır" style="display:none"></input>
+                  <input name='assistant' value={{i.9}} style="display:none"></input>
+                  <button type="submit" class="mb-6 btn waves-effect waves-light gradient-45deg-purple-deep-orange" style="padding : 0 0.24rem">Sonlandır</button>
+               </form>
+               {% else %}
+                  
+               {% endif %}
+                  
+              
+            </ul>
+               <p class="medium-small">{{i.4}}</p>
+               
+               <div class="current-balance-container current-balance-donut-chart">
+                    <div id="current-balance-donut-chart{{i.11}}" class="current-balance-shadow" style="position: relative;">
+                       
+                    </div>
+              </div>
+               
+              <h5 class="center-align">{{i.5}}</h5>
+               <div class="row">
+                
+                {% if i.6 == 1 %}
+               
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#0e2db9" class="material-icons">search</i>Aktif</p>
+                {% elif i.6 == 2%}
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#008000" class="material-icons">done</i>Tamamlandı</p>
+                {% elif i.6 == 3%}
+                
+                {% if  i.10 == 0 %}
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#ff0000" class="material-icons">clear</i>Yeterince veri olmadığı için sonlandırıldı</p>
+                {% else %}
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#ff0000" class="material-icons">clear</i>Sonlandırıldı</p>
+                {% endif %}
+                   
+                {% elif i.6 == 0%}
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#000000" class="material-icons">stop</i>Durduruldu</p>
+
+                {% elif i.6 == 9%}
+                <p class="medium-small center-align" style="color:#000000"><i style="color:#0e2db9" class="material-icons">search</i>Aktif</p>
+
+                {% else %}
+
+                {% endif %}
+                    
+           </div></div>
+        </div>
+
+    </div>
+
+
+   
+{% endif %}
+   
+
+
+{% endfor %}

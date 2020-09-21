@@ -1,0 +1,328 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> {% include 'includes/meta_tags.html' %}
+    <link rel="apple-touch-icon" href="../../../app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/vendors.min.css' %}">
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/page-contact.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/materialize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/vertical-modern-menu-template/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/pricing.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- END: Page Level CSS-->
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/custom/custom.css' %}">
+    <!-- END: Custom CSS-->
+</head>
+<!-- END: Head-->
+
+<body onload="{{pop_up}}" class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu 2-columns  " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    {% if request.user.is_authenticated %} {% include "includes/navbar_login.html" %} {% else %} {% include "includes/navbar_unlogin.html" %} {% endif %}
+    <!-- END: Header-->
+
+    <!-- BEGIN: SideNav-->
+    <aside class="sidenav-main nav-collapsible sidenav-light sidenav-active-rounded nav-collapsed">
+        {% include 'includes/navbar_icon.html' %} {% if request.user.is_authenticated %}
+        <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+            <div class="collapsible-body" style="display: block;">
+                <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                    <li><a class="collapsible-body" href="/landing" data-i18n=""><i class="material-icons" style="font-size: 25px">help_outline</i><span>Socinsta Nedir?</span></a>
+                    </li>
+                    <li class="active"><a class="collapsible-body active" data-i18n="" href="/pricing"><i class="material-icons" style="font-size: 25px">style</i><span>Paketler</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/dashboard" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">trending_up</i><span>Dashboard</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/profile" data-i18n=""><i class="material-icons" style="font-size: 25px">account_box</i><span>Hesaplarım</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/assistants_details" data-i18n=""><i class="material-icons" style="font-size: 25px">done_all</i><span>Yapılan işlemler</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/select_assistant" data-i18n=""><i class="material-icons" style="font-size: 25px">group_work</i><span>Asistanlar</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/contact" data-i18n=""><i class="material-icons" style="font-size: 25px">message</i><span>İletişim</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/logout" data-i18n=""><i class="material-icons" style="font-size: 25px">power_settings_new</i><span>Çıkış Yap</span></a>
+                    </li>
+                </ul>
+            </div>
+        </ul>
+        {% else %}
+        <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+            <div class="collapsible-body" style="display: block;">
+                <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                    <li><a class="collapsible-body" href="/landing" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">help_outline</i><span>Socinsta Nedir?</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/pricing" data-i18n=""><i class="material-icons" style="font-size: 25px">style</i><span>Paketler</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">touch_app</i><span>Giriş Yap</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">person_add</i><span>Kayıt Ol</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/forget_password" data-i18n=""><i class="material-icons" style="font-size: 25px">lock</i><span>Şifremi unuttum</span></a>
+                    </li>
+                    <li class="active"><a class="collapsible-body active" href="/contact" data-i18n=""><i class="material-icons" style="font-size: 25px">message</i><span>İletişim</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/login" data-i18n="" style="display: block;"><i class="material-icons" style="font-size: 25px">trending_up</i><span>Dashboard</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">account_box</i><span>Hesaplarım</span></a>
+                    </li>
+                    <li><a class="collapsible-body" href="/login" data-i18n=""><i class="material-icons" style="font-size: 25px">group_work</i><span>Asistanlar</span></a>
+                    </li>
+
+                </ul>
+            </div>
+        </ul>
+        {% endif %} {% include 'includes/navbar_menu.html' %}
+    </aside>
+    <!-- END: SideNav-->
+
+    <!-- BEGIN: Page Main-->
+
+    <div id="main" class="main-full">
+        <div class="row">
+
+            <!--CLEAR PAGE START-->
+
+            <!-- Borderless Table -->
+            <div class="row" id='cardx'>
+                <div class="col s12">
+                    <div id="borderless-table" class="card card-tabs">
+                        <div class="card-content">
+                            <div class="card-title">
+                                <div class="row">
+                                    <div class="col s12 m6 l10">
+                                        <h4 class="card-title">Sipariş Özeti</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="view-borderless-table">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id">Ürün</th>
+                                                    <th data-field="name">Süre</th>
+                                                    <th data-field="price">Fiyat</th>
+                                                    <th data-field="price">Kaldır</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{name}}</td>
+                                                    <td>{{offered_days}}</td>
+                                                    <td>&nbsp;₺{{package_price}}</td>
+                                                    <td>
+                                                        <form action="/payment/remove_item/" method="POST">
+                                                            {% csrf_token %}
+
+                                                            <p>
+                                                                <button value='package' name='remove' class="mb-6 btn-floating btn-small waves-effect waves-light gradient-45deg-red-pink gradient-shadow">
+                                                                    <i class="material-icons">clear</i>
+                                                                </button>
+                                                            </p>
+
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                                {% if coupon %}
+                                                <tr>
+                                                    <td>İndirim Kuponu</td>
+                                                    <td>{{coupon_code}}</td>
+                                                    <td>-₺{{discount_price}}</td>
+                                                    <td>
+                                                        <form action="/payment/remove_item/" method="POST">
+                                                            {% csrf_token %}
+                                                            <p>
+                                                                <button name='remove' value='coupon' class="mb-6 btn-floating btn-small  waves-effect waves-light gradient-45deg-red-pink gradient-shadow">
+                                                                    <i class="material-icons">clear</i>
+                                                                </button>
+                                                            </p>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% else %}
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %} {% if coupon %}
+
+                        <div class="row">
+                            <div class="input-field col m3 s6">
+                                <i class="material-icons prefix">confirmation_number</i>
+                                <input placeholder="İNDİRİM KUPONU" value='{{coupon_code}}' disabled id="icon_email" type="text" class="validate">
+                            </div>
+                            <div class="input-field col m3 s6">
+                                <button disable class="btn waves-effect waves-light gradient-45deg-red-pink gradient-shadow" type="submit" name="action">
+                                    UYGULA</button>
+                            </div>
+                            <div class="input-field col m3 l3 s12">
+                                <a href="/payment/havale/" class="waves-effect waves-light btn gradient-45deg-amber-amber z-depth-4 mr-1 mb-2">Havaleyle Ödeme</a>
+                            </div>
+                            <div class="input-field col m3 l3 s12">
+                                <form action="https://www.shopier.com/ShowProduct/api_pay4.php" method="POST">
+                                    <input name='API_key' value='{{API_key}}' style="display:none" />
+                                    <input name='website_index' value='1' style="display:none" />
+                                    <input name='platform_order_id' value='{{platform_order_id}}' style="display:none" />
+                                    <input name='product_name' value='' style="display:none" />
+                                    <input name='product_type' value='0' style="display:none" />
+                                    <input name='buyer_name' value='{{buyer_name}}' style="display:none" />
+                                    <input name='buyer_surname' value='{{buyer_surname}}' style="display:none" />
+                                    <input name='buyer_email' value='{{buyer_email}}' style="display:none" />
+                                    <input name='buyer_account_age' value='0' style="display:none" />
+                                    <input name='buyer_id_nr' value='1' style="display:none" />
+                                    <input name='buyer_phone' value='' style="display:none" />
+                                    <input name='billing_address' value='{{shipping_country}}' style="display:none" />
+                                    <input name='billing_city' value='{{shipping_city}}' style="display:none" />
+                                    <input name='billing_country' value='{{shipping_country}}' style="display:none" />
+                                    <input name='billing_postcode' value='34699' style="display:none" />
+                                    <input name='shipping_address' value='' style="display:none" />
+                                    <input name='shipping_city' value='{{shipping_city}}' style="display:none" />
+                                    <input name='shipping_country' value='{{shipping_country}}' style="display:none" />
+                                    <input name='shipping_postcode' value='' style="display:none" />
+                                    <input name='total_order_value' value='{{total_order_value}}' style="display:none" />
+                                    <input name='currency' value='0' style="display:none" />
+                                    <input name='platform' value='0' style="display:none" />
+                                    <input name='is_in_frame' value='0' style="display:none" />
+                                    <input name='current_language' value='0' style="display:none" />
+                                    <input name='modul_version' value='1.0.4' style="display:none" />
+                                    <input name='random_nr' value='{{random_nr}}' style="display:none" />
+                                    <input name='signature' value='{{signature}}' style="display:none" />
+                                    <input name='callback' value='{{callback}}' style="display:none" />
+
+                                    <button class="waves-effect waves-light btn block gradient-45deg-amber-amber z-depth-4 mr-1 mb-2" type='submit'>Kredi Kartıyla Ödeme</button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="row">
+                            <form action="/payment/add_coupon/" method="POST">
+                                {% csrf_token %}
+                                <div class="input-field col m3 s6">
+                                    <i class="material-icons prefix">confirmation_number</i>
+                                    <input placeholder="İNDİRİM KUPONU" name='coupon' id="icon_email" type="text" class="validate">
+                                </div>
+                                <div class="input-field col m3 s6">
+                                    <button class="btn waves-effect waves-light gradient-45deg-red-pink gradient-shadow" type="submit" name="action">
+                                        UYGULA</button>
+                                </div>
+                            </form>
+                            <div class="input-field col m3 l3 s12">
+                                <a href="/payment/havale/" class="waves-effect waves-light btn gradient-45deg-amber-amber z-depth-4 mr-1 mb-2">Havaleyle Ödeme</a>
+                            </div>
+                            <div class="input-field col m3 l3 s12">
+                                <form action="https://www.shopier.com/ShowProduct/api_pay4.php" method="POST">
+                                    <input name='API_key' value='{{API_key}}' style="display:none" />
+                                    <input name='website_index' value='1' style="display:none" />
+                                    <input name='platform_order_id' value='{{platform_order_id}}' style="display:none" />
+                                    <input name='product_name' value='' style="display:none" />
+                                    <input name='product_type' value='0' style="display:none" />
+                                    <input name='buyer_name' value='{{buyer_name}}' style="display:none" />
+                                    <input name='buyer_surname' value='{{buyer_surname}}' style="display:none" />
+                                    <input name='buyer_email' value='{{buyer_email}}' style="display:none" />
+                                    <input name='buyer_account_age' value='0' style="display:none" />
+                                    <input name='buyer_id_nr' value='1' style="display:none" />
+                                    <input name='buyer_phone' value='' style="display:none" />
+                                    <input name='billing_address' value='{{shipping_country}}' style="display:none" />
+                                    <input name='billing_city' value='{{shipping_city}}' style="display:none" />
+                                    <input name='billing_country' value='{{shipping_country}}' style="display:none" />
+                                    <input name='billing_postcode' value='34699' style="display:none" />
+                                    <input name='shipping_address' value='' style="display:none" />
+                                    <input name='shipping_city' value='{{shipping_city}}' style="display:none" />
+                                    <input name='shipping_country' value='{{shipping_country}}' style="display:none" />
+                                    <input name='shipping_postcode' value='' style="display:none" />
+                                    <input name='total_order_value' value='{{total_order_value}}' style="display:none" />
+                                    <input name='currency' value='0' style="display:none" />
+                                    <input name='platform' value='0' style="display:none" />
+                                    <input name='is_in_frame' value='0' style="display:none" />
+                                    <input name='current_language' value='0' style="display:none" />
+                                    <input name='modul_version' value='1.0.4' style="display:none" />
+                                    <input name='random_nr' value='{{random_nr}}' style="display:none" />
+                                    <input name='signature' value='{{signature}}' style="display:none" />
+                                    <input name='callback' value='{{callback}}' style="display:none" />
+
+                                    <button class="waves-effect waves-light btn block gradient-45deg-amber-amber z-depth-4 mr-1 mb-2" type='submit'>Kredi Kartıyla Ödeme</button>
+                                </form>
+
+                            </div>
+
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--CLEAR PAGE END -->
+
+    </div>
+    </div>
+    <!-- END: Page Main-->
+
+    <!-- BEGIN: Footer-->
+    <script>
+        function select_payment() {
+            var x = document.getElementById('havale');
+            var z = document.getElementById('cardx');
+            x.style.display = ""
+            z.style.display = "none"
+        }
+    </script>
+
+    <script>
+        function coupon_success() {
+            swal("{{coupon_code}} İndirim Kuponu Onaylandı.", "Paketinizde %{{percentage}} indirim uygulandı.", "success")
+        }
+
+        function coupon_notfind() {
+            swal("{{coupon_code}} Kuponu Bulunamadı.", "Lütfen yazımın doğruluğunu kontrol ediniz. ", "error")
+        }
+
+        function coupon_ended() {
+            swal("{{coupon_code}} Kuponu Aktif Değil.", "Bir sorun olduğunu düşünüyorsanız lütfen bizimle iletişime geçiniz.", "error")
+        }
+    </script>
+
+    <!-- END: Footer-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="{% static 'app-assets/js/vendors.min.js' %}" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    <script src="{% static 'app-assets/js/plugins.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/custom/custom-script.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/customizer.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/page-contact.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/js/scripts/ui-alerts.js' %}" type="text/javascript"></script>
+    <script src="{% static 'app-assets/vendors/sweetalert/sweetalert.min.js' %}"></script>
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+</body>
+
+</html>

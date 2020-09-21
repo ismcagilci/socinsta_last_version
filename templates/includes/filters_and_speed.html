@@ -1,0 +1,202 @@
+<li class="step">
+    <div class="step-title waves-effect">Filtreler</div>
+    <div class="step-content">
+        <div class="row">
+            
+                <div class="switch">
+                    <label>Varsayılan Ayarlar
+                        <input name="is_default" type="checkbox" id="checkbox" onclick="filtreler_y()"> <span class="lever"></span>
+                    </label>
+                </div>
+            
+        </div>
+        <br>
+        <div id="filtrelerall" style="display:block">
+            <div class="row">
+                <div class="col s12 m6 l2">
+                    <div class="card-content">
+                        <div class="card-title">
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align">
+                                    <p>Max Takipçi<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Filtrelenecek hesapların max takipçi sayısını giriniz , belirlenen miktardan fazla takipçiye sahip kullanıcılar , pass geçilir"><i style="color:#ff4283" class="material-icons small">info_outline</i></a>
+                                        <input type="number" value="3500" name="max_followers" class="validate" placeholder="Max Takipçi" style="text-align: center;" required>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <p class="range-field">
+                            <input type="range" name="max_followers" min="0" max="7500" class="" value="3500"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                          </p> -->
+                </div>
+                <div class="col s12 m6 l2">
+                    <div class="card-content">
+                        <div class="card-title">
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align">
+                                    <p>Min Takipçi<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Filtrelenecek hesapların min takipçi sayısını giriniz , belirlenen miktardan az takipçiye sahip kullanıcılar , pass geçilir"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                                        <input type="number" value="30" name="min_followers" class="validate" placeholder="Min Takipçi" style="text-align: center;" required>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <p class="range-field">
+                            <input type="range" name="min_followers" min="0" max="7500" class="" value="0"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                          </p> -->
+                </div>
+                <div class="col s12 m6 l2">
+                        <div class="card-content">
+                            <div class="card-title">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 center-align">
+                                        <p>Max Takip<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Filtrelenecek hesapların max takip sayısını giriniz , belirlenen miktardan fazla hesap takip eden kullanıcılar , pass geçilir"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                                            <input type="number" value="1500" name="max_followings" class="validate" placeholder="Max Takip" style="text-align: center;" required>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <p class="range-field">
+                                <input type="range" name="max_followings" min="0" max="7500" class="" value="3500"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                              </p> -->
+                    </div>
+                    <div class="col s12 m6 l2">
+                            <div class="card-content">
+                                <div class="card-title">
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 center-align">
+                                            <p>Min Takip<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Filtrelenecek hesapların min takip sayısını giriniz , belirlenen miktardan az hesap takip eden kullanıcılar , pass geçilir"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                                                <input type="number" value="30" name="min_followings" class="validate" placeholder="Min Takip" style="text-align: center;" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <p class="range-field">
+                                    <input type="range" name="min_followings" min="0" max="7500" class="" value="0"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                                  </p> -->
+                        </div>
+                        <div class="col s12 m6 l2">
+                            <div class="card-content">
+                                <div class="card-title">
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 center-align">
+                                            <p>Max Gönderi<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Filtrelenecek hesapların max gönderi sayısını giriniz , belirlenen miktardan az gönderiye sahip kullanıcılar , pass geçilir"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                                                <input type="number" value="100" name="max_posts" class="validate" placeholder="Max Gönderi" style="text-align: center;" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <p class="range-field">
+                                    <input type="range" name="max_posts" min="0" max="1000" class="" value = "300"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                                  </p> -->
+                        </div>
+                        <div class="col s12 m6 l2">
+                            <div class="card-content">
+                                <div class="card-title">
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 center-align">
+                                            <p>Min Gönderi<a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Takip edilecek hesapların min gönderi sayısını belirler"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                                                <input type="number" value="3" name="min_posts" class="validate" placeholder="Min Gönderi" style="text-align: center;" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <p class="range-field">
+                                    <input type="range" name="min_posts" min="0" max="1000" class="" value = "1"><span class="thumb" style="height: 0px; width: 0px; top: 10px; margin-left: 7px; left: 542.64px;"></span>
+                                  </p> -->
+                        </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="input-field col m12 s12">
+                    <p class='center-align'>Takibe Dahil Edilecekler</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col s12 m6 l3">
+                            <p>
+                                <label>
+                                    <input name="is_private" type="checkbox" checked = "checked"> <span style="padding-left:20px">Gizli hesaplar</span>
+                                </label><a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Gizli hesapların takip listesine dahil olup olmayacığını belirler."><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                            </p>
+                        </div>
+                        <div class="col s12 m6 l3">
+                            <p>
+                                <label>
+                                    <input name="biography" type="checkbox" checked = "checked"> <span style="padding-left:20px">Biyografisi Olmayanlar</span>
+                                </label><a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Biyografisi olmayan hesapların takip listesinde olup olmayacığını belirler."><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                            </p>
+                        </div>
+                        <div class="col s12 m6 l3">
+                            <p>
+                                <label>
+                                    <input name="has_anonymous_profile_picture" type="checkbox" > <span style="padding-left:20px">Anonim Profil Resmi</span>
+                                </label><a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Profil resmi olmayan hesapların takip listesinde olup olmayacığını belirler."><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                            </p>
+                        </div>
+                        <div class="col 6 m6 l3">
+                            <p>
+                                <label>
+                                    <input name="is_business" type="checkbox" checked = "checked"> <span style="padding-left:20px">İşletme Hesapları</span>
+                                </label><a class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="İşletme hesaplarının takip listesinde olup olmayacığını belirler."><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div>
+                        <div class="row">
+                            <div class="col m4 s12 mb-3">
+                                <button class="waves-effect waves dark btn btn-primary next-step" type="submit">Devam <i class="material-icons right">arrow_forward</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+<li class="step">
+    <div class="step-title waves-effect">Hız Ayarları</div>
+    <div class="step-content" style="margin-left: 0px;margin-right: 0px;">
+        <div class='row'>
+        <div class="input-field col m4 s12 l4">
+            <!-- <select class="validate" name="speed" required>
+            <option value="" disabled selected>Seç</option>
+              <option value="400">400(En hızlı)</option>
+              <option value="500">500(İdeal)</option>
+              <option value="600">600(En güvenli)</option>
+            </select> -->
+            <div class="row">
+                <div class="col s12">
+                    <label for="shortcut">Lütfen Oku</label>
+                    <a id="shortcut" class="tooltipped waves-effect waves-light red-text" data-position="top" data-tooltip="Yapılacak işlemler arasındaki beklemesi süresini giriniz , tavsiye edilen bekleme süresi 400 saniye"><i style="color:#ff4283" class="material-icons small mt-10">info_outline</i></a>
+                </div>
+                <div class="col s12">
+                    <input type="number" name="speed" class="validate" placeholder="Bekleme süresinini seçiniz(Saniye)" required>
+
+                </div>
+            </div>
+            
+          </div>
+        </div>
+          
+            <div class="row">
+                    <div class="col m4 s12 mb-3">
+                      <button class="waves-effect waves-dark btn btn-primary" type="submit">Görevi başlat</button>
+                    </div>
+                </div>
+
+                
+
+    </div>
+</div>
+</li>

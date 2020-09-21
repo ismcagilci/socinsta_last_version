@@ -1,0 +1,217 @@
+<div class="row">
+    <div class="col s12 m6 l4 card-width">
+        <div class="card animate fadeRight">
+     <div class="gradient-shadow gradient-45deg-light-blue-cyan border-radius-6">
+        <div class="card-content center-align">
+           <div class="row">
+                 <a class='dropdown-trigger white-text float-right' href='#' data-target='dropdown2'><i class="material-icons float-right">more_vert</i></a> </h4>
+                 <!-- Dropdown Structure -->
+                                 <ul id='dropdown2' class='dropdown-content'>
+                                    <li><a onclick="change_new_followers('Günlük')" class="black-text">Günlük</a></li>
+                                    <li><a onclick="change_new_followers('Haftalık')" class="black-text">Haftalık</a></li>
+                                    <li><a onclick="change_new_followers('Aylık')" class="black-text">Aylık</a></li>
+                                 </ul>
+              <div class="row">
+                    <div class="col l6 offset-l3 col s6 offset-s3">
+                          <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i>
+                    </div>
+                   
+
+              </div>
+           </div>
+      
+           <div class="row"  id="daily">
+               <h4 class="m-0 white-text lighten-4">
+                       <b>{{all_new_ffs.daily_new_followers}}</b>
+                    </h4>
+                    <p class="white-text lighten-4" >Günlük Yeni Takipçi</p>
+                     
+           </div>
+
+
+           <div class="row"  id="weekly" style="display: none">
+               <h4 class="m-0 white-text lighten-4">
+                       <b>{{all_new_ffs.weekly_new_followers}}</b>
+                    </h4>
+                    <p class="white-text lighten-4" >Haftalık Yeni Takipçi</p>
+                   
+           </div>
+
+               
+
+               
+           <div class="row"  id="monthly" style="display: none">
+                   <h4 class="m-0 white-text lighten-4">
+                           <b>{{all_new_ffs.monthly_new_followers}}</b>
+                        </h4>
+                        <p class="white-text lighten-4" >Aylık Yeni Takipçi</p>
+                          
+           </div>
+
+
+          
+        </div>
+     </div>
+     </div>
+  </div>
+  <div class="col s12 m6 l4 card-width">
+        <div class="card animate fadeUp">
+     <div class="gradient-shadow gradient-45deg-red-pink border-radius-6">
+        <div class="card-content center-align">
+              <div class="row">
+                    <a class='dropdown-trigger white-text float-right' href='#' data-target='dropdown3'><i class="material-icons float-right">more_vert</i></a> </h4>
+                    <!-- Dropdown Structure -->
+                    <ul id='dropdown3' class='dropdown-content'>
+                        <li><a onclick="change_new_likers('Günlük')" class="black-text">Günlük</a></li>
+                        <li><a onclick="change_new_likers('Haftalık')" class="black-text">Haftalık</a></li>
+                        <li><a onclick="change_new_likers('Aylık')" class="black-text">Aylık</a></li>
+                     </ul>
+                 <div class="row">
+                       <div class="col l6 offset-l3 col s6 offset-s3">
+                             <i class="material-icons red-text small-ico-bg mb-5">favorite_border</i>
+                          </div>
+                      
+
+                 </div>
+              </div>
+              <div class="row"  id="daily_likers">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.daily_new_likes}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Günlük Yeni Beğeni</p>
+                      
+            </div>
+            <div class="row"  id="weekly_likers" style="display: none">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.weekly_new_likes}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Haftalık Yeni Beğeni</p>
+                      
+            </div>
+
+            <div class="row"  id="monthly_likers" style="display: none">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.monthly_new_likes}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Aylık Yeni Beğeni</p>
+                      
+            </div>
+        </div>
+     </div>
+  </div>
+  </div>
+  <div class="col s12 m6 l4 card-width">
+        <div class="card animate fadeLeft">
+     <div class="gradient-shadow gradient-45deg-amber-amber border-radius-6">
+        <div class="card-content center-align">
+
+              <div class="row">
+                    <a class='dropdown-trigger white-text float-right' href='#' data-target='dropdown4'><i class="material-icons float-right">more_vert</i></a> </h4>
+                    <!-- Dropdown Structure -->
+                    <ul id='dropdown4' class='dropdown-content'>
+                        <li><a onclick="change_new_comments('Günlük')" class="black-text">Günlük</a></li>
+                        <li><a onclick="change_new_comments('Haftalık')" class="black-text">Haftalık</a></li>
+                        <li><a onclick="change_new_comments('Aylık')" class="black-text">Aylık</a></li>
+                     </ul>
+                 <div class="row">
+                       <div class="col l6 offset-l3 col s6 offset-s3">
+                             <i class="material-icons amber-text small-ico-bg mb-5">comment</i>
+                          </div>
+                      
+
+                 </div>
+              </div>
+            <div class="row"  id="daily_comments">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.daily_new_comments}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Günlük Yeni Yorum</p>
+                      
+            </div>
+            <div class="row"  id="weekly_comments" style="display: none">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.weekly_new_comments}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Haftalık Yeni Yorum</p>
+                      
+            </div>
+            <div class="row"  id="monthly_comments" style="display: none">
+                <h4 class="m-0 white-text lighten-4">
+                        <b>{{all_new_ffs.monthly_new_comments}}</b>
+                     </h4>
+                     <p class="white-text lighten-4" >Aylık Yeni Yorum</p>
+                      
+            </div>
+        </div>
+     </div>
+  </div>
+  </div>
+</div>
+
+<script>
+    function change_new_followers(wow) {
+        var x = document.getElementById(wow);
+        var y = document.getElementById('daily');
+        var z = document.getElementById('weekly');
+        var j = document.getElementById('monthly');
+        
+        if (wow === 'Günlük') {
+            y.style.display = "block"
+            z.style.display = 'none'
+            j.style.display = 'none'
+            
+        } else if (wow === 'Haftalık') {
+            z.style.display = "block"
+            y.style.display = 'none'
+            j.style.display = 'none'
+        } else {
+            j.style.display = "block"
+            y.style.display = 'none'
+            z.style.display = 'none'
+        }
+        }
+    function change_new_likers(wow) {
+        var x = document.getElementById(wow);
+        var y = document.getElementById('daily_likers');
+        var z = document.getElementById('weekly_likers');
+        var j = document.getElementById('monthly_likers');
+        
+        if (wow === 'Günlük') {
+            y.style.display = "block"
+            z.style.display = 'none'
+            j.style.display = 'none'
+            
+        } else if (wow === 'Haftalık') {
+            z.style.display = "block"
+            y.style.display = 'none'
+            j.style.display = 'none'
+        } else {
+            j.style.display = "block"
+            y.style.display = 'none'
+            z.style.display = 'none'
+        }
+        }
+    function change_new_comments(wow) {
+        var x = document.getElementById(wow);
+        var y = document.getElementById('daily_comments');
+        var z = document.getElementById('weekly_comments');
+        var j = document.getElementById('monthly_comments');
+        
+        if (wow === 'Günlük') {
+            y.style.display = "block"
+            z.style.display = 'none'
+            j.style.display = 'none'
+            
+        } else if (wow === 'Haftalık') {
+            z.style.display = "block"
+            y.style.display = 'none'
+            j.style.display = 'none'
+        } else {
+            j.style.display = "block"
+            y.style.display = 'none'
+            z.style.display = 'none'
+        }
+        }
+
+        
+    </script>
