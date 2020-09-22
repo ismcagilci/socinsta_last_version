@@ -62,7 +62,6 @@ def dashboard(request):
    
     ig_accounts_list= functions.get_linked_accounts(request.user)
     linked_assistants_list=functions.linked_assistants(request.user)
-
     new_linked_assistants_list = []
 
     for i in linked_assistants_list:
@@ -88,10 +87,16 @@ def dashboard(request):
             elif a == 2:
                 ohow.insert(2,i)
                 i.append("z")
+                a += 1
+            elif a == 3:
+                ohow.insert(3,i)
+                i.append("ogg")
+
 
     follow_actions = Follow_Actions.objects.filter(instagram_account__main_user__username = request.user,status = 1)
     like_actions = Like_Actions.objects.filter(instagram_account__main_user__username = request.user,status = 1)
     comment_actions = Comment_Actions.objects.filter(instagram_account__main_user__username = request.user,status = 1)
+    unfollow_actions = Unfollow_Actions.objects.filter(instagram_account__main_user__username = request.user,status = 1)
     total_actions = []
     
     for i in follow_actions:
@@ -99,6 +104,8 @@ def dashboard(request):
     for i in like_actions:
         total_actions.append(i)
     for i in comment_actions:
+        total_actions.append(i)
+    for i in unfollow_actions:
         total_actions.append(i)
 
     total_actions_return = 0
@@ -114,8 +121,6 @@ def dashboard(request):
     except:
         percentage_of_actions_return = 1
         total_actions = ["x"]
-
-    
     return render(request, "dashboard.html",{"ig_accounts":ig_accounts_list,"linked_assistants":ohow,"all_new_ffs":all_new_ffs,"percentage_of_actions_return":percentage_of_actions_return,"total_actions":len(total_actions),"total_actions_return":total_actions_return})
 
 
@@ -609,8 +614,10 @@ def unfollow(request):
                     tasks.create_white_list_users.apply_async(queue='deneme1',args=[request.user.username, unfollow_assistant.id])
             return redirect("/dashboard/")
         else:
-            unfollow_assistant = Assistants.objects.filter(instagram_account=active_ig_account,assistant_type=3)
-            if len(unfollow_assistant) == 0:
+            unfollow_assistant = Assistants.objects.filter(instagram_account=active_ig_account,assistant_type=3,activity_status=1)
+            unfollow_assistant2 = Assistants.objects.filter(instagram_account=active_ig_account,assistant_type=3,activity_status=9)
+
+            if len(unfollow_assistant) + len(unfollow_assistant2) == 0:
                 return render(request,"unfollow.html")
             else:
                 return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Asistan zaten aktif!')"})

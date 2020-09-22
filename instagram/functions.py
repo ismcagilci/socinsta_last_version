@@ -27,6 +27,7 @@ def get_assistants_details(user):
         latest_follow_assistant = Assistants.objects.filter(instagram_account__username=active_ig_account.username,assistant_type=0)
         latest_like_assistant = Assistants.objects.filter(instagram_account__username=active_ig_account.username,assistant_type=1)
         latest_comment_assistant = Assistants.objects.filter(instagram_account__username=active_ig_account.username,assistant_type=2)
+        latest_unfollow_assistant = Assistants.objects.filter(instagram_account__username=active_ig_account.username,assistant_type=3)
         assistants_list=[]
     #check_latest_assistants
    
@@ -90,6 +91,18 @@ def get_assistants_details(user):
             ig_username="@"+i.instagram_account.username
             status=i.activity_status
             assistants_list.append((i.number_of_actions,percentage_of_process,i.assistant_type,i.source_type,ig_username,target_location,status,"z","Yorum_Lokasyon",i.id,i.is_there_enough_data))
+    if latest_unfollow_assistant:
+        i = latest_unfollow_assistant.latest("update_time")
+        percentage_of_process=len(Unfollow_Actions.objects.filter(status=1,assistant = i))/i.number_of_actions*100
+        percentage_of_process=round(percentage_of_process)
+        target_username="@"+i.instagram_account.username
+        ig_username="@"+i.instagram_account.username
+        status=i.activity_status
+        assistants_list.append((i.number_of_actions,percentage_of_process,i.assistant_type,i.source_type,ig_username,target_username,status,"ogg","Takipten Çık",i.id,i.is_there_enough_data))
+
+        
+
+
 
     
     return assistants_list
@@ -161,16 +174,16 @@ def new_actions(user):
 
 def linked_assistants(user):
     x=get_assistants_details(user)
-    assistants_list=[(0,"Takip"),(0,"Beğeni"),(0,"Yorum")]
+    assistants_list=[(0,"Takip"),(0,"Beğeni"),(0,"Yorum"),(0,"Takip bırak")]
     if x == False:
         return assistants_list
     assistants_list=[]
-    assistant_type_list=["Takip","Beğeni","Yorum"]
+    assistant_type_list=["Takip","Beğeni","Yorum","Takip bırak"]
     for b in x:
-        if b[2]==0 or b[2]==1 or b[2]==2:
+        if b[2]==0 or b[2]==1 or b[2]==2 or b[2]==3:
             assistants_list.append(b)
     a=0
-    for i in range(3):
+    for i in range(4):
         try:
             if assistants_list[a][2] != a:
                 assistants_list.insert(a,(0,assistant_type_list[a]))

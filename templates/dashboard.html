@@ -409,6 +409,34 @@
        
    )
 
+   var CurrentBalanceDonutChartogg = new Chartist.Pie(
+       "#current-balance-donut-chartogg",
+       {
+           labels: [1, 2],
+           series: [{ meta: "Tamamlandı (%)", value: {{linked_assistants.3.0}} }, { meta: "Kalan (%)", value:100-{{linked_assistants.3.0}} }]
+       },
+       {
+           donut: true,
+           donutWidth: 8,
+           showLabel: false,
+           plugins: [
+               Chartist.plugins.tooltip({ class: "current-balance-tooltip", appendToBody: true }),
+               Chartist.plugins.fillDonut({
+                   items: [
+                       {
+                           content: '<p class="small center-align">Hedef</p><h5 class="mt-0 mb-0">{{linked_assistants.3.0}}</h5>'
+                       }
+                   ]
+               })
+           ]
+       }
+
+       
+   )
+
+    
+
+
 })(window, document, jQuery)
 
 
