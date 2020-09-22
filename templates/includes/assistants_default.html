@@ -45,123 +45,141 @@
   </head>
 
   <body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu 2-columns  " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
-    <header class="page-topbar" id="header">
-        <div class="navbar navbar-fixed"> 
-          <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-purple-deep-orange no-shadow">
-            <div class="nav-wrapper">
-    
-              <ul class="navbar-list right">
-                
-                {% if ig_accounts|length == 0 %}
-                <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">0</small></i></a></li>
+<header class="page-topbar" id="header">
+    <div class="navbar navbar-fixed"> 
+      <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-purple-deep-orange no-shadow">
+        <div class="nav-wrapper">
 
-                {% else %}
-                {% endif %}
-                  
-                
-                
-                {% for b in ig_accounts %}
-    
-                
-                {% if b.is_current_account == 1 %}
-                <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="{{b.profile_pic_url}}" alt="avatar"><i></i></span></a></li>
-        
-                {% else %}
-                  
-                {% endif %}
-                  
-                  
-                {% endfor %}
-                  
-                  
-              </ul>
-              <!-- translation-button-->
+          <ul class="navbar-list right">
+            
+            {% if ig_accounts|length > 0 %}
+            
+            {% for i in ig_accounts %}
+            
+            {% if i.is_current_account == 1 %}
+            <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="{{i.profile_pic_url}}" alt="avatar"><i></i></span></a></li>
+
+            {% endif %}
               
-              <!-- notifications-dropdown-->
-              <ul class="dropdown-content" id="profile-dropdown">
-                <li>
+
+            {% endfor %}
+              
+
+            {% else %}
+            <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">0</small></i></a></li>
+            {% endif %}
+              
+            
+        
+              
+              
+          </ul>
+          <!-- translation-button-->
+          
+          <!-- notifications-dropdown-->
+          <ul class="dropdown-content" id="notifications-dropdown">
+            <li>
+              
+              {% if ig_accounts|length == 0 %}
+              <a href="/profile#instagram_accounts"><h6 class="center-align">Lütfen Hesap Ekleyin</h6></a>
+              {% else %}
+              {% endif %}
+                
+              
+            </li>
+            <!-- <li class="divider"></li>
+            
+            {% for i in ig_accounts %}
+
+            
+            <li>
+               <div class="row">
                   
-                  {% if ig_accounts|length == 0 %}
-                  <h6 class="center-align">Lütfen Hesap Ekleyin</h6>
-                  {% else %}
-                  <h6 class="center-align">Aktif Hesabı Değiştir</h6>
-                  {% endif %}
-                    
                   
-                </li>
-                <li class="divider"></li>
-                
-                {% for i in ig_accounts %}
-    
-                
-                <li>
-                   <div class="row">
-                      
-                      
-                       <div class="col l1 center-align">
-                             <img class = "circle" width="30" src={{i.profile_pic_url}} alt="">
-                         </div>
-                       <div class="col l8 mt-1 center-align">
-                             <a class="black-text" style="font-size: 1.1rem" href="/change_active_account/{{i.username}}">
-                                      @{{i.username}} 
-                             </a>
-                       </div>
-                       {% if i.is_current_account == 1 %}
-                     
-                          <a href="/change_active_account/{{i.username}}">
-                            <i class="material-icons dp48 green-text" style="line-height: 30px ; height: 1px;">check</i>
-                          </a>
-                
-                      
-                      
-                         
-                      {% else %}
-                         
+                   <div class="col l1 center-align">
+                         <img class = "circle" width="30" src={{i.profile_pic_url}} alt="">
+                     </div>
+                   <div class="col l8 mt-1 center-align">
+                         <a class="black-text" style="font-size: 1.1rem" href="/change_active_account/{{i.username}}">
+                                  @{{i.username}} 
+                         </a>
+                   </div>
+                   {% if i.is_current_account == 1 %}
                  
                       <a href="/change_active_account/{{i.username}}">
-                        <i class="material-icons dp48 red-text" style="line-height: 30px;height: 1px;">autorenew</i>
-    
+                        <i class="material-icons dp48 green-text" style="line-height: 30px ; height: 1px;">check</i>
                       </a>
-                      
-                         
-                      {% endif %} 
-                   </div>
-               </li>
-                   
-                {% endfor %}
-              </ul>
-              <!-- profile-dropdown-->
-              <!-- <ul class="dropdown-content" id="profile-dropdown">
-                <li><a class="grey-text text-darken-1" href="/dashboard"><i class="material-icons">person_outline</i>Dashboard</a></li>
-                {% for b in ig_accounts %}
-    
-                
-                {% if b.is_current_account == 1 %}
-                <li><a class="grey-text text-darken-1" href="/delete_ig_account_navbar/{{b.username}}"><i class="material-icons">clear</i> Hesabı Kaldır</a></li>
-    
-                {% else %}
-                  
-                {% endif %}
+            
                   
                   
-                {% endfor %}
-                <li class="divider"></li>
-                <li><a class="grey-text text-darken-1" href="/logout"><i class="material-icons">keyboard_tab</i> Çıkış Yap</a></li>
-              </ul> -->
-            </div>
-            <nav class="display-none search-sm">
-              <div class="nav-wrapper">
-                <form>
-                  <div class="input-field">
-                    <input class="search-box-sm" type="search" required="">
-                    <label class="label-icon" for="search"><i class="material-icons search-sm-icon">search</i></label><i class="material-icons search-sm-close">close</i>
+                     
+                  {% else %}
+                     
+             
+                  <a href="/change_active_account/{{i.username}}">
+                    <i class="material-icons dp48 red-text" style="line-height: 30px;height: 1px;">autorenew</i>
+
+                  </a>
+                  
+                     
+                  {% endif %} 
+               </div>
+           </li>
+               
+            {% endfor %} -->
+          </ul>
+          <!-- profile-dropdown-->
+          <ul class="dropdown-content" id="profile-dropdown">
+
+           
+
+            {% for i in ig_accounts %}
+            
+                <div class="row center-align">
+                  <img class="circle" width= "80" src="{{i.profile_pic_url}}" alt="" style="margin-bottom: -15px;margin-top: 10px;">
+                  <li><a class="grey-text text-darken-1 center-align" style="font-size: 25px;" href="/dashboard">{{i.username}}</a></li>
+                  <div class="col l8 offset-l2 col s8 offset-s2">
+
+                  {% if i.is_current_account == 1 %}
+                  <li><a class="grey-text text-darken-1 center-align" style="font-size: 25px;"><i class="material-icons green-text">check</i>Aktif Hesap</a></li>
+                  {% else %}
+                  <li><a class="grey-text text-darken-1 center-align" style="font-size: 25px;" href="/change_active_account/{{i.username}}"><i class="material-icons">person_outline</i>Aktifleştir</a></li>
+                  {% endif %}
+                    <li><a class="grey-text text-darken-1 center-align" style="font-size: 22px;" href="/delete_ig_account_navbar/{{i.username}}"><i class="material-icons red-text">clear</i> Hesabı Kaldır</a></li>
+                    <li class="divider"></li>
+
                   </div>
-                </form>
-              </div>
-            </nav>
-          </nav>
+                </div>
+            {% endfor %}
+
+            <!-- <li><a class="grey-text text-darken-1" href="/dashboard"><i class="material-icons">person_outline</i>Dashboard</a></li> -->
+            <!-- {% for b in ig_accounts %}
+
+            
+            {% if b.is_current_account == 1 %}
+
+            {% else %}
+              
+            {% endif %}
+              
+              
+            {% endfor %} -->
+            <!-- <li><a class="grey-text text-darken-1" href="/logout"><i class="material-icons">keyboard_tab</i> Çıkış Yap</a></li> -->
+          </ul>
         </div>
-      </header>
+        <nav class="display-none search-sm">
+          <div class="nav-wrapper">
+            <form>
+              <div class="input-field">
+                <input class="search-box-sm" type="search" required="">
+                <label class="label-icon" for="search"><i class="material-icons search-sm-icon">search</i></label><i class="material-icons search-sm-close">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </nav>
+    </div>
+  </header>
 <aside class="sidenav-main nav-collapsible sidenav-light sidenav-active-rounded nav-collapsed">
 <div class="brand-sidebar">
         <h1 class="logo-wrapper"><a class="brand-logo darken-1" href="" style="padding:22px 20px">

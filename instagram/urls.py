@@ -14,6 +14,7 @@ urlpatterns = [
     path('assistants_details/',views.assistants_details),
     path('profile/',views.profile),
     path('dashboard/',views.dashboard),
+    path('unfollow/',views.unfollow),
     path('',views.dashboard),
 
 ]

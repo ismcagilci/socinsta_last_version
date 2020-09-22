@@ -46,13 +46,13 @@ function Dropify(element, options) {
         allowedFormats: ['portrait', 'square', 'landscape'],
         allowedFileExtensions: ['*'],
         messages: {
-            'default': 'Drag and drop a file here or click',
-            'replace': 'Drag and drop or click to replace',
-            'remove':  'Remove',
-            'error':   'Ooops, something wrong happended.'
+            'default': 'Sürükle ve bırak yada tıklayarak dosya yükle',
+            'replace': 'Sürükle ve bırak yada tıklayarak dosyayı değiştir',
+            'remove':  'Kaldır',
+            'error':   'Ooops, bir şeyler yanlış gitti'
         },
         error: {
-            'fileSize': 'The file size is too big ({{ value }} max).',
+            'fileSize': 'Dosya boyutu çok büyük ({{ value }} max).',
             'minWidth': 'The image width is too small ({{ value }}}px min).',
             'maxWidth': 'The image width is too big ({{ value }}}px max).',
             'minHeight': 'The image height is too small ({{ value }}}px min).',

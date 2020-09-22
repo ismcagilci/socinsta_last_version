@@ -13,11 +13,12 @@
 
 
 #card_general{
-    background: linear-gradient(45deg, #6a3232, #741ca7);
+    background: linear-gradient(45deg, #833ab4,#fd1d1d, #fcb045);
 }
 
+
 .card-assistant-button{
-    background: linear-gradient(45deg,#043f6c, #c64dd9);
+    background-color: white;
     border-radius: 500px !important;
 }
 
@@ -66,3 +67,6 @@ h2#navbar-brand{
 
 
 
+.navbar{
+    padding: 30px 50px;
+}

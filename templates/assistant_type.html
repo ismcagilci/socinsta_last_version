@@ -1,8 +1,12 @@
 {% load static %}
 {% include 'includes/assistants_default.html' %}
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
     <!-- BEGIN: Page Main-->
     <div id="main" class="main-full">
+      <br>
+      <br>
+      <br>
         <div class="row">
        
           <div class="col s12">
@@ -14,12 +18,13 @@
           <div class="card-content">
               
               <div class="row">
-                    <div class="col s12 m3 l4">
+                    <div class="col s12 m3 l3">
                           <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3 animate fadeRight">
                               <form action="/select_assistant/" method="post">
                                 {% csrf_token %}
                                   <div class="card-content center">
-                                      <img src="{% static 'app-assets/images/icon/x.png' %}" alt="" class="width-40">
+                                    <i class="fas fa-users" style="font-size: 90px;color:white"></i>
+                                      <!-- <img src="{% static 'app-assets/images/icon/x.png' %}" alt="" class="width-40"> -->
                                       <h5 class="white-text lighten-4">TAKİP</h5>                               
                                       <button type="submit" name="type" value='follow' class="waves-effect waves-light  btn gradient-45deg-amber-amber box-shadow-none border-round mr-1 mb-1">BAŞLAT</button>
                                   </div>
@@ -28,12 +33,13 @@
                                 
                           </div>
                     </div>
-                    <div class="col s12 m3 l4">
+                    <div class="col s12 m3 l3">
                           <div class="card gradient-shadow gradient-45deg-red-pink border-radius-3 animate fadeUp">
                               <form action="/select_assistant/" method="post">
                                 {% csrf_token %}
                                 <div class="card-content center">
-                                      <img src="{% static 'app-assets/images/icon/love.png' %}" alt="" class="width-40">
+                                  <i class="fas fa-thumbs-up" style="font-size: 90px;color: white;"></i>
+                                      <!-- <img src="{% static 'app-assets/images/icon/love.png' %}" alt="" class="width-40"> -->
                                       <h5 class="white-text lighten-4">BEĞENİ</h5>
                                       <button type="submit" name="type" value='like' class="waves-effect waves-light  btn gradient-45deg-amber-amber box-shadow-none border-round mr-1 mb-1">BAŞLAT</button>
                                 </div>
@@ -41,12 +47,14 @@
                           </div>
                     </div>
                     
-                    <div class="col s12 m3 l4">
+                    <div class="col s12 m3 l3">
                           <div class="card gradient-shadow gradient-45deg-purple-deep-orange border-radius-3 animate fadeLeft">
                               <form action="/select_assistant/" method="post">
                                 {% csrf_token %}
                                 <div class="card-content center">
-                                      <img src="{% static 'app-assets/images/icon/w.png' %}" alt="" class="width-40">
+                                  <i class="far fa-comments" style="font-size: 90px;color: white;"></i>
+
+                                      <!-- <img src="{% static 'app-assets/images/icon/w.png' %}" alt="" class="width-40"> -->
                                       <h5 class="white-text lighten-4">YORUM</h5>
                                       <button type="submit" name="type" value='comment' class="waves-effect waves-light  btn gradient-45deg-amber-amber box-shadow-none border-round mr-1 mb-1">BAŞLAT</button>
                               
@@ -54,6 +62,19 @@
                               </form>
                           </div>
                     </div>
+
+                    <div class="col s12 m3 l3">
+                      <div class="card gradient-shadow gradient-45deg-purple-deep-orange border-radius-3 animate fadeRight">
+                            
+                            <div class="card-content center">
+                                <i class="fas fa-user-times" style="font-size: 90px;color: white;"></i>
+                                  <!-- <img src="{% static 'app-assets/images/icon/w.png' %}" alt="" class="width-40"> -->
+                                  <h5 class="white-text lighten-4">TAKİPTEN ÇIKMA</h5>
+                                  <a href="/unfollow" name="type" class="waves-effect waves-light  btn gradient-45deg-amber-amber box-shadow-none border-round mr-1 mb-1">BAŞLAT</a>
+                          
+                            </div>
+                      </div>
+                </div>
                    
               </div>
               

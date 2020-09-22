@@ -140,7 +140,7 @@
                                     <br>
                                     <div class="row">
                                         <div class="col l6 s6 center-align">
-                                            <a class=" btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem" href="/dashboard">Analiz
+                                            <a class=" btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem;background-color: black;" href="/dashboard">Analiz
                                       </a>
                                         </div>
     
@@ -148,7 +148,7 @@
                                             <form action="/delete_ig_account" method="POST">
                                                 {% csrf_token %}
                                                 <input name='ig_account' value={{i.username}} style="display:none"></input>
-                                                <button class="btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem" type="submit"> KALDIR
+                                                <button class="btn waves-effect waves-light card-assistant-button border-round " style="padding: 0 2rem;background-color: black;" type="submit"> KALDIR
                                                 </button>
                                             </form>
                                         </div>
@@ -166,7 +166,7 @@
                                                         {% if assistants_list.0 == 1 %}
                                                         <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
                                                         <a href="/select_assistant">
-                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                            <i class="material-icons black-text small-ico-bg mb-5">add</i>
                                                         </a>
     
                                                         {% endif %}
@@ -174,7 +174,7 @@
                                                     </div>
     
                                                     <div class="row">
-                                                        <p class="white-text lighten-4">Takip</p>
+                                                        <p class="black-text lighten-4">Takip</p>
                                                     </div>
     
                                                 </div>
@@ -185,9 +185,9 @@
                                                 <div class="card-content center-align" style="padding: 16px">
                                                     <div class="row">
                                                         {% if assistants_list.1 == 1 %}
-                                                        <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
+                                                        <i class="material-icons black-text small-ico-bg mb-5">people_outline</i> {% else %}
                                                         <a href="/select_assistant">
-                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                            <i class="material-icons black-text small-ico-bg mb-5">add</i>
                                                         </a>
     
                                                         {% endif %}
@@ -195,7 +195,7 @@
                                                     </div>
     
                                                     <div class="row">
-                                                        <p class="white-text lighten-4">Beğeni</p>
+                                                        <p class="black-text lighten-4">Beğeni</p>
                                                     </div>
     
                                                 </div>
@@ -209,7 +209,7 @@
                                                         {% if assistants_list.2 == 1 %}
                                                         <i class="material-icons blue-text small-ico-bg mb-5">people_outline</i> {% else %}
                                                         <a href="/select_assistant">
-                                                            <i class="material-icons blue-text small-ico-bg mb-5">add</i>
+                                                            <i class="material-icons black-text small-ico-bg mb-5">add</i>
                                                         </a>
     
                                                         {% endif %}
@@ -217,7 +217,7 @@
                                                     </div>
     
                                                     <div class="row center-align">
-                                                        <p class="white-text lighten-4">Yorum</p>
+                                                        <p class="black-text lighten-4">Yorum</p>
                                                     </div>
     
                                                 </div>

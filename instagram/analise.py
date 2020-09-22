@@ -15,7 +15,7 @@ def analyse_ig_account(username):
     comment_count = private_api.get_comment_count(user_posts)
 
     #Get the general datas of the account
-    info = api.username_info('bedriyan0')
+    info = api.username_info(username)
     user_pk=info.get('user').get('pk')
     username=info.get('user').get('username')
     full_name=info.get('user').get('full_name')
@@ -53,7 +53,7 @@ def analyse_ig_account(username):
 
     next_max_id = results.get('next_max_id')
     while next_max_id:
-        results = private_api.get_user_followers(rank_token, 'bedriyan0', api,next_max_id)
+        results = private_api.get_user_followers(rank_token, username, api,next_max_id)
         user_followers.extend(results.get('users', []))
         next_max_id = results.get('next_max_id')
 

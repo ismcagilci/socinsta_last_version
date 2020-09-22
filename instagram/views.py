@@ -357,11 +357,14 @@ def assistants_details(request):
     like_actions = Like_Actions.objects.filter(instagram_account=active_ig_account)
     follow_actions = Follow_Actions.objects.filter(instagram_account=active_ig_account)
     comment_actions = Comment_Actions.objects.filter(instagram_account=active_ig_account)
+    unfollow_actions = Unfollow_Actions.objects.filter(instagram_account=active_ig_account)
     for i in like_actions:
         all_actions_list.append(i)
     for i in follow_actions:
         all_actions_list.append(i)
     for i in comment_actions:
+        all_actions_list.append(i)
+    for i in unfollow_actions:
         all_actions_list.append(i)
     actions_dict = {}
     general_actions_list = []
@@ -381,6 +384,7 @@ def assistants_details(request):
     for i in all_actions_list:
         actions_dict["Kullanıcı adı"] = i.ig_user.username
         actions_dict["Bağlı olduğu hesap"] = i.instagram_account.username
+        
         if i.relationship == 0:
             relationship = "Takipçileri"
         elif i.relationship == 1:
@@ -389,6 +393,8 @@ def assistants_details(request):
             relationship = "Beğenenler"
         elif i.relationship == 3:
             relationship = "Yorum yapanlar"
+        else:
+            relationship = "Takip edilenler"
         actions_dict["Kaynak Çeşidi"] = relationship
         
         if i.source_type == 0:
@@ -397,6 +403,8 @@ def assistants_details(request):
             source = "Hashtag"
         elif i.source_type == 2:
             source = "Lokasyon"
+        else:
+            source = "Takip edilenler"
         actions_dict["Kaynak Türü"] = source
         actions_dict["Geldiği Kaynak"] = i.source
         if i.assistant.assistant_type == 0:
@@ -405,6 +413,10 @@ def assistants_details(request):
             assistant = "Beğeni"
         elif i.assistant.assistant_type == 2:
             assistant = "Yorum"
+
+        elif i.assistant.assistant_type == 3:
+            assistant = "Takipten Çıkma"
+        
         actions_dict["Eylem Türü"] = assistant
         if i.status == 0:
             status = "Beklemede"
@@ -557,3 +569,48 @@ def create_assistant(request):
                 
 
     return redirect("/dashboard/")
+
+
+@login_required(login_url='/login/')
+def unfollow(request):
+    ig_accounts_list = functions.get_linked_accounts(request.user)
+    active_ig_account = Instagram_Accounts.objects.filter(is_current_account=1,main_user = request.user)
+    if len(active_ig_account) == 0:
+        return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Devam etmek için hesap ekleyin!')"})
+    else:
+        active_ig_account = active_ig_account[0]
+        ig_account_analyse = Instagram_Accounts_Analyse.objects.filter(instagram_account=active_ig_account)[0]
+        if request.POST:
+            post = request.POST.copy()
+            noa = post.get('number_of_actions')
+            noa = int(noa)
+            if noa > ig_account_analyse.following_count:
+                noa = ig_account_analyse.following_count
+            is_default = post.get("is_default")
+            speed = post.get('speed')
+            unfollow_assistant = Assistants(instagram_account=active_ig_account,number_of_actions = noa,activity_status= 1,update_time = datetime.now(timezone.utc),assistant_type=3,source=active_ig_account.username)
+            unfollow_assistant.save()
+            unfollow_assistant_settings = Assistants_Settings(assistant=unfollow_assistant,speed=speed)
+            unfollow_assistant_settings.save()
+            if is_default == None:
+                white_list = request.FILES
+                if white_list:
+                    white_list = white_list['white_list']
+                    white_list_users = []
+                    for i in white_list:
+                        x = i.decode().strip("\n").strip(",\r").strip(" ")
+                        white_list_users.append(x)
+                    tasks.create_white_list_users.apply_async(queue='deneme1',args=[request.user.username,unfollow_assistant.id,white_list_users])  
+                else:
+                    pass
+            else:
+                white_list_assistant = White_List_Assistant.objects.filter(instagram_account=active_ig_account)
+                if len(white_list_assistant) == 0:
+                    tasks.create_white_list_users.apply_async(queue='deneme1',args=[request.user.username, unfollow_assistant.id])
+            return redirect("/dashboard/")
+        else:
+            unfollow_assistant = Assistants.objects.filter(instagram_account=active_ig_account,assistant_type=3)
+            if len(unfollow_assistant) == 0:
+                return render(request,"unfollow.html")
+            else:
+                return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Asistan zaten aktif!')"})

@@ -200,6 +200,43 @@ class Comment_Actions(models.Model):
 
 
 
+
+
+
+class Unfollow_Actions(models.Model):
+    """Keeps all target users' informations of comment actions"""
+    instagram_account=models.ForeignKey(Instagram_Accounts,on_delete=models.CASCADE,null=True)
+    assistant = models.ForeignKey(Assistants,on_delete=models.CASCADE,null=True)
+    ig_user=models.ForeignKey(IG_Users,on_delete=models.CASCADE,null=True)
+    status=models.IntegerField(verbose_name='status',null=True)
+    update_time=models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
+    relationship=models.IntegerField(verbose_name='relationship with the source',null=True)
+    source_type=models.IntegerField(verbose_name='type of source',null=True)
+    source=models.IntegerField(verbose_name='source',null=True)
+
+
+    def __str__(self):
+        return str(self.instagram_account)
+
+
+class White_List_Assistant(models.Model):
+    instagram_account=models.ForeignKey(Instagram_Accounts,on_delete=models.CASCADE,null=True)
+    status=models.IntegerField(verbose_name='status',null=True)
+    update_time=models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
+    def __str__(self):
+        return str(self.instagram_account)
+
+class White_List_Users(models.Model):
+    username = models.CharField(max_length=200, verbose_name="username", null=True)
+    assistant = models.ForeignKey(White_List_Assistant,on_delete=models.CASCADE,null=True)
+    instagram_account = models.ForeignKey(Instagram_Accounts, on_delete=models.CASCADE, null=True)
+    update_time=models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
+    def __str__(self):
+        return self.username
+
+
+
+
 class User_Sources(models.Model):
     """Keeps where the assistant should countine to collect data from the same user."""
     instagram_account = models.ForeignKey(Instagram_Accounts, on_delete=models.CASCADE, null=True)
@@ -250,3 +287,6 @@ class Volta(models.Model):
     status =  models.IntegerField(verbose_name='Activity_Status', null=True)
     def __str__(self):
         return str(self.status)
+
+
+

@@ -124,7 +124,8 @@ def check_assistant_is_ready(assistant_id):
         action_name=Like_Actions
     elif assistant_type == 2:
         action_name=Comment_Actions
-        desired_wait+=75
+    elif assistant_type == 3:
+        action_name = Unfollow_Actions
     
     
     all_actions = action_name.objects.filter(assistant=assistant)
@@ -231,9 +232,77 @@ def executioner(assistant_id):
                 comment_action.save()
             api_error = Api_Error(assistant = assistant,error_action_type = 9,api_error_mean = str(e),error_source = "executioner_comment")
             api_error.save()
+    elif assistant_type == 3:
+        unfollow_action = Unfollow_Actions.objects.filter(status=9)[0]
+        ig_user = unfollow_action.ig_user
+        pk_number = ig_user.pk_number
+        try:
+            api.friendships_destroy(pk_number)
+            unfollow_action.status = 1
+            unfollow_action.assistant = assistant
+            unfollow_action.update_time = datetime.now(timezone.utc)
+            unfollow_action.save()
+        except Exception as e:
+            if str(e) == "Expecting value: line 1 column 1 (char 0)":
+                unfollow_action.status = 3
+                unfollow_action.assistan = assistant
+                unfollow_action.update_time = datetime.now(timezone.utc)
+                unfollow_action.save()
+            else:
+                unfollow_action.status = 2
+                unfollow_action.assistan = assistant
+                unfollow_action.update_time = datetime.now(timezone.utc)
+                unfollow_action.save()
+            api_error = Api_Error(assistant = assistant,error_action_type = 10,api_error_mean = str(e),error_source = "executioner_unfollow")
+            api_error.save()
+
+
     assistant.activity_status = 1
     assistant.update_time = datetime.now(timezone.utc)
     assistant.save()
+
+@shared_task
+def create_white_list_users(username,assistant_id,white_list=0):
+    active_ig_account = Instagram_Accounts.objects.filter(is_current_account=1,main_user__username = username)[0]
+    white_list_assistant = White_List_Assistant.objects.filter(instagram_account = active_ig_account)
+    if len(white_list_assistant) == 0:
+        white_list_assistant = White_List_Assistant(instagram_account = active_ig_account,status = 9,update_time = datetime.now(timezone.utc))
+        white_list_assistant.save()
+    white_list_assistant = White_List_Assistant.objects.filter(instagram_account = active_ig_account)[0]
+    if white_list == 0:
+        api = private_api.login_instagram(active_ig_account.username,active_ig_account.password)
+        user_followings = private_api.get_user_followings_simple(assistant_id=assistant_id)
+        if user_followings:
+            for i in user_followings:
+                white_list_user = White_List_Users.objects.filter(instagram_account=active_ig_account,username=i.get('username'))
+                if len(white_list_user) == 0:
+                    white_list_user = White_List_Users(username = i.get('username'),instagram_account = active_ig_account,assistant=white_list_assistant)
+                    white_list_user.save()
+                else:
+                    pass
+        else:
+            pass
+    else:
+        for i in white_list:
+            white_list_user = White_List_Users.objects.filter(instagram_account=active_ig_account,username=i.get('username'))
+            if len(white_list_user) == 0:
+                white_list_user = White_List_Users(username = i,instagram_account = active_ig_account,assistant=white_list_assistant)
+                white_list_user.save()
+            else:
+                pass
+    white_list_assistant.status = 1
+    white_list_assistant.save()
+
+        
+
+
+
+           
+
+    
+
+    
+
 
 def create_action(assistant_id):
     assistant = Assistants.objects.filter(id =assistant_id)[0]
@@ -249,7 +318,33 @@ def create_action(assistant_id):
         private_api.commenters_general(assistant_id)
         #private_api.posters_general(assistant_id)
     else:
-        pass
+        #unfollow
+        user_followings = private_api.get_user_followings_simple(assistant_id=assistant_id)
+        if user_followings:
+            active_assistant = Assistants.objects.filter(id = assistant_id)[0]
+            active_ig_account = active_assistant.instagram_account
+            for i in user_followings:
+                check_ig_user = IG_Users.objects.filter(username = i.get("username"))
+                if len(check_ig_user) == 0:
+                    pk = i.get('pk')
+                    username = i.get('username')
+                    full_name = i.get('full_name')
+                    is_private = i.get('is_private')
+                    profile_pic_url = i.get('profile_pic_url')
+                    has_anonymous_profile_picture = i.get('has_anonymous_profile_picture')
+                    user_object = IG_Users(username = username,pk_number=pk, full_name =full_name,is_private=is_private,profile_pic_url=profile_pic_url,has_anonymous_profile_picture=has_anonymous_profile_picture)
+                    user_object.save()
+                ig_user = IG_Users.objects.filter(username = i.get('username'))[0]
+                white_list_user = White_List_Users.objects.filter(instagram_account=active_ig_account,username=i.get('username'))
+                unfollow_action = Unfollow_Actions.objects.filter(ig_user__username = i.get('username'),instagram_account=active_ig_account,assistant=active_assistant)
+                if len(white_list_user) == 0 and len(unfollow_action) == 0:
+                    unfollow_action = Unfollow_Actions(instagram_account=active_ig_account,ig_user=ig_user,status=9,assistant=active_assistant,update_time=datetime.now(timezone.utc))
+                    unfollow_action.save()
+                else:
+                    pass
+        else:
+            pass
+
 
 def is_there_enough_data(assistant_id):
     assistant = Assistants.objects.filter(id =assistant_id)[0]
@@ -284,73 +379,78 @@ def is_there_enough_data(assistant_id):
 @shared_task
 def get_action_data(assistant_id):
     assistant = Assistants.objects.filter(id =assistant_id)[0]
-    if assistant.queue == int(assistant.relationship[0]):
+    if assistant.assistant_type == 3:
         create_action(assistant_id)
-        if len(assistant.relationship)>1:
-            assistant.queue = int(assistant.relationship[1])
-            assistant.save()
-        else:
+    else:
+        if assistant.queue == int(assistant.relationship[0]):
+            create_action(assistant_id)
+            if len(assistant.relationship)>1:
+                assistant.queue = int(assistant.relationship[1])
+                assistant.save()
+            else:
+                check_datas = is_there_enough_data(assistant_id)
+                if check_datas == False:
+                    assistant.is_there_enough_data = 0
+                    assistant.activity_status = 3
+                else:
+                    assistant.is_there_enough_data = 1
+        elif assistant.queue == int(assistant.relationship[1]): 
+            create_action(assistant_id)
+            if len(assistant.relationship)>2:
+                assistant.queue= int(assistant.relationship[2])
+                assistant.save()
+            else:
+                check_datas = is_there_enough_data(assistant_id)
+                if check_datas == False:
+                    assistant.is_there_enough_data = 0
+                    assistant.activity_status = 3
+                else:
+                    assistant.is_there_enough_data = 1
+                assistant.queue= int(assistant.relationship[0])
+                assistant.save()
+
+        elif assistant.queue == int(assistant.relationship[2]): 
+            create_action(assistant_id)
+            if len(assistant.relationship)>3:
+                assistant.queue = int(assistant.relationship[3])
+                assistant.save()
+            else:
+                check_datas = is_there_enough_data(assistant_id)
+                if check_datas == False:
+                    assistant.is_there_enough_data = 0
+                    assistant.activity_status = 3
+                else:
+                    assistant.is_there_enough_data = 1
+                assistant.queue= int(assistant.relationship[0])
+                assistant.save()
+
+        elif assistant.queue==int(assistant.relationship[3]):
+            create_action(assistant_id) 
+            if len(assistant.relationship)>4:
+                assistant.queue = int(assistant.relationship[4])
+                assistant.save()
+            else:
+                check_datas = is_there_enough_data(assistant_id)
+                if check_datas == False:
+                    assistant.is_there_enough_data = 0
+                    assistant.activity_status = 3
+                else:
+                    assistant.is_there_enough_data = 1
+                assistant.queue= int(assistant.relationship[0])
+                assistant.save()
+        elif assistant.queue==int(assistant.relationship[4]):
             check_datas = is_there_enough_data(assistant_id)
             if check_datas == False:
                 assistant.is_there_enough_data = 0
                 assistant.activity_status = 3
             else:
                 assistant.is_there_enough_data = 1
-    elif assistant.queue == int(assistant.relationship[1]): 
-        create_action(assistant_id)
-        if len(assistant.relationship)>2:
-            assistant.queue= int(assistant.relationship[2])
-            assistant.save()
-        else:
-            check_datas = is_there_enough_data(assistant_id)
-            if check_datas == False:
-                assistant.is_there_enough_data = 0
-                assistant.activity_status = 3
-            else:
-                assistant.is_there_enough_data = 1
+            create_action(assistant_id) 
             assistant.queue= int(assistant.relationship[0])
             assistant.save()
 
-    elif assistant.queue == int(assistant.relationship[2]): 
-        create_action(assistant_id)
-        if len(assistant.relationship)>3:
-            assistant.queue = int(assistant.relationship[3])
-            assistant.save()
-        else:
-            check_datas = is_there_enough_data(assistant_id)
-            if check_datas == False:
-                assistant.is_there_enough_data = 0
-                assistant.activity_status = 3
-            else:
-                assistant.is_there_enough_data = 1
-            assistant.queue= int(assistant.relationship[0])
-            assistant.save()
+    assistant = Assistants.objects.filter(id =assistant_id)[0]
 
-    elif assistant.queue==int(assistant.relationship[3]):
-        create_action(assistant_id) 
-        if len(assistant.relationship)>4:
-            assistant.queue = int(assistant.relationship[4])
-            assistant.save()
-        else:
-            check_datas = is_there_enough_data(assistant_id)
-            if check_datas == False:
-                assistant.is_there_enough_data = 0
-                assistant.activity_status = 3
-            else:
-                assistant.is_there_enough_data = 1
-            assistant.queue= int(assistant.relationship[0])
-            assistant.save()
-    elif assistant.queue==int(assistant.relationship[4]):
-        check_datas = is_there_enough_data(assistant_id)
-        if check_datas == False:
-            assistant.is_there_enough_data = 0
-            assistant.activity_status = 3
-        else:
-            assistant.is_there_enough_data = 1
-        create_action(assistant_id) 
-        assistant.queue= int(assistant.relationship[0])
-        assistant.save()
-    
     if assistant.activity_status == 3:
         pass
     else:
@@ -380,11 +480,17 @@ def volta():
                 action_name=Like_Actions
             elif assistant_type == 2:
                 action_name=Comment_Actions
+            elif assistant_type == 3:
+                action_name = Unfollow_Actions
+                white_list = White_List_Users.objects.filter(instagram_account=i.instagram_account)
+                i.number_of_actions = i.number_of_actions - len(white_list)
             if len(action_name.objects.filter(assistant = i,status = 1)) >= i.number_of_actions:
                     i.activity_status = 2
                     i.save()
             else:
                 current_datas = action_name.objects.filter(assistant = i,status = 0)
+                if assistant_type == 3:
+                    current_datas =  action_name.objects.filter(assistant = i,status = 9)
                 if len(current_datas)==0:
                     api_errors = Api_Error.objects.filter(assistant__instagram_account__username = i.instagram_account.username).order_by('-update_time')
                     if len(api_errors)>0:
@@ -394,7 +500,6 @@ def volta():
                             pass
                         error_count = len(api_errors)
                         passing_time = (datetime.now(timezone.utc)-api_errors[0].update_time).seconds
-                        print(passing_time,"GEÇEN ZAMAN",error_count,"ERROR_COUNT")
                         if passing_time >= error_count*360:
                             print("api error bekleme zamanı tamamlandı")
                             get_action_data.apply_async(queue="deneme1",args=[i.id])

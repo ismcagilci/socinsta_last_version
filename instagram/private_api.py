@@ -475,6 +475,28 @@ def check_user_actions(raw_results, assistant_id):
     7- hashtag posters    
 """       
 
+def get_user_followings_simple(assistant_id):
+    api = private_api.login_with_assistant(assistant_id = assistant_id)
+    username = Assistants.objects.filter(id = assistant_id)[0].instagram_account.username
+    user_id = get_user_pk(username, api)
+    rt = api.generate_uuid()
+    user_followings = []
+    try:
+        results = api.user_following(user_id, rank_token=rt)
+        user_followings.extend(results.get('users', []))
+        next_max_id = results.get('next_max_id')
+        while next_max_id:
+            results = api.user_following(user_id, rank_token=rt,next_max_id = next_max_id)
+            user_followings.extend(results.get('users', []))
+            next_max_id = results.get('next_max_id')
+        return user_followings
+    except Exception as e:
+        assistant = Assistants.objects.filter(id = assistant_id)[0]
+        api_error = Api_Error(assistant = assistant,error_action_type = 12,api_error_mean = str(e),error_source = "get_user_followings_simple")
+        api_error.save()
+        return False
+
+
 #Get 200 followings of a user
 def get_user_followers(rank_token, username, api, max_id,assistant):
     try:
