@@ -145,6 +145,13 @@ CELERY_BEAT_SCHEDULE = {
         # If you're using any arguments
         'options': {'queue' : 'volta'}
     },  
+ 'analyse_beat': {
+   'task': 'instagram.tasks.Analyse_Beat',
+    # There are 4 ways we can handle time, read further 
+   'schedule': 5.0,
+    # If you're using any arguments
+    'options': {'queue' : 'analyse'}
+}, 
 }
 
 
