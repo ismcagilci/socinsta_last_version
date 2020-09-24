@@ -71,50 +71,59 @@ def prepare_filtered_users(assistant_id):
         action_name=Like_Actions
     elif assistant_type == 2:
         action_name=Comment_Actions
+    elif assistant_type == 3:
+        action_name=Unfollow_Actions
 
     filtered_users = action_name.objects.filter(assistant = assistant ,status = 9)
 
     if len(filtered_users) >= 1:
         pass
-
     else:
         action = action_name.objects.filter(assistant = assistant ,status = 0)
         for i in action:
-            try:
-                pk_number = ig_user_detailed_info(action_name,i.id,assistant_id)
-                if private_api.check_filter(settings, pk_number) == True:
-                    i.status = 9
-                    i.assistan = assistant
-                    i.update_time = datetime.now(timezone.utc)
-                    i.save()
-                else: 
-                    i.status = -1
-                    i.assistan = assistant
-                    i.update_time = datetime.now(timezone.utc)
-                    i.save()
-                filtered_users = action_name.objects.filter(assistant = assistant ,status = 9)
-                if len(filtered_users)>=1:
-                    if assistant_type == 0:
-                        break
-                    else:
-                        user_feed(i.ig_user.pk_number,assistant_id)
-                        break
-                else:
-                    continue
-            except Exception as e:
-                i.status = 2
-                i.assistan = assistant
+            if assistant_type == 3:
+                i.status = 9
+                i.assistant = assistant
                 i.update_time = datetime.now(timezone.utc)
                 i.save()
-                api_error = Api_Error(assistant = assistant,error_action_type = 6,api_error_mean = str(e),error_source = "prepare_filtered_users")
-                api_error.save()
                 break
+            else:
+                try:
+                    pk_number = ig_user_detailed_info(action_name,i.id,assistant_id)
+                    if private_api.check_filter(settings, pk_number) == True:
+                        i.status = 9
+                        i.assistan = assistant
+                        i.update_time = datetime.now(timezone.utc)
+                        i.save()
+                    else: 
+                        i.status = -1
+                        i.assistan = assistant
+                        i.update_time = datetime.now(timezone.utc)
+                        i.save()
+                    filtered_users = action_name.objects.filter(assistant = assistant ,status = 9)
+                    if len(filtered_users)>=1:
+                        if assistant_type == 0:
+                            break
+                        else:
+                            user_feed(i.ig_user.pk_number,assistant_id)
+                            break
+                    else:
+                        continue
+                except Exception as e:
+                    i.status = 2
+                    i.assistan = assistant
+                    i.update_time = datetime.now(timezone.utc)
+                    i.save()
+                    api_error = Api_Error(assistant = assistant,error_action_type = 6,api_error_mean = str(e),error_source = "prepare_filtered_users")
+                    api_error.save()
+                    break
     assistant.activity_status = 1
     assistant.update_time = datetime.now(timezone.utc)
     assistant.save()
 
 
 def check_assistant_is_ready(assistant_id):
+    print("check_assistant çağırıldı")
     assistant = Assistants.objects.filter(id =assistant_id)[0]
     assistant_type = assistant.assistant_type
     desired_wait = Assistants_Settings.objects.get(assistant__id=assistant_id).speed
@@ -130,6 +139,7 @@ def check_assistant_is_ready(assistant_id):
     
     all_actions = action_name.objects.filter(assistant=assistant)
     if len(all_actions) == 0:
+        print("action bulunamadı")
         return True
     else:
         latest_actions = action_name.objects.filter(assistant=assistant).order_by('-update_time')[0]
@@ -306,6 +316,7 @@ def create_white_list_users(username,assistant_id,white_list=0):
 
 def create_action(assistant_id):
     assistant = Assistants.objects.filter(id =assistant_id)[0]
+    assistant_type = assistant.assistant_type
     if assistant.queue == 0:
         private_api.followers_general(assistant_id)
     elif assistant.queue == 1:
@@ -318,11 +329,28 @@ def create_action(assistant_id):
         private_api.commenters_general(assistant_id)
         #private_api.posters_general(assistant_id)
     else:
-        #unfollow
+        #unfollow action create
+
+        #transfer previous unfollow actions to new assistant
+        active_assistant = Assistants.objects.filter(id = assistant_id)[0]
+        active_ig_account = active_assistant.instagram_account
+        check_unfollow_action = Unfollow_Actions.objects.filter(instagram_account=active_ig_account)
+        new_noa = 0
+        if len(check_unfollow_action) != 0:
+            for i in check_unfollow_action:
+                if i.status == 9 or i.status == 0:
+                    i.assistant = active_assistant
+                    i.update_time = datetime.now(timezone.utc)
+                    i.save()
+                    new_noa += 1
         user_followings = private_api.get_user_followings_simple(assistant_id=assistant_id)
-        if user_followings:
-            active_assistant = Assistants.objects.filter(id = assistant_id)[0]
-            active_ig_account = active_assistant.instagram_account
+        if user_followings == False:
+            pass
+        elif len(user_followings) == len(check_unfollow_action):
+                active_assistant.number_of_actions = new_noa
+                active_assistant.update_time = datetime.now(timezone.utc)
+                active_assistant.save()
+        else:
             for i in user_followings:
                 check_ig_user = IG_Users.objects.filter(username = i.get("username"))
                 if len(check_ig_user) == 0:
@@ -338,12 +366,28 @@ def create_action(assistant_id):
                 white_list_user = White_List_Users.objects.filter(instagram_account=active_ig_account,username=i.get('username'))
                 unfollow_action = Unfollow_Actions.objects.filter(ig_user__username = i.get('username'),instagram_account=active_ig_account,assistant=active_assistant)
                 if len(white_list_user) == 0 and len(unfollow_action) == 0:
-                    unfollow_action = Unfollow_Actions(instagram_account=active_ig_account,ig_user=ig_user,status=9,assistant=active_assistant,update_time=datetime.now(timezone.utc))
+                    unfollow_action = Unfollow_Actions(instagram_account=active_ig_account,ig_user=ig_user,status=0,assistant=active_assistant,update_time=datetime.now(timezone.utc))
                     unfollow_action.save()
                 else:
                     pass
-        else:
-            pass
+
+            check_unfollow_action = Unfollow_Actions.objects.filter(instagram_account=active_ig_account)
+            new_noa = 0
+            for i in check_unfollow_action:
+                if i.status == 9 or i.status == 0:
+                    new_noa +=1
+            active_assistant.number_of_actions = new_noa
+            active_assistant.update_time = datetime.now(timezone.utc)
+            active_assistant.save()
+        
+        # assistant = Assistants.objects.filter(id =assistant_id)[0]
+        # if assistant.number_of_actions == 0:
+        #     assistant.activity_status = 2
+        #     assistant.update_time = datetime.now(timezone.utc)
+        #     assistant.save()
+
+            
+
 
 
 def is_there_enough_data(assistant_id):
@@ -378,6 +422,7 @@ def is_there_enough_data(assistant_id):
 
 @shared_task
 def get_action_data(assistant_id):
+    print("get_action_data çağırıldı")
     assistant = Assistants.objects.filter(id =assistant_id)[0]
     if assistant.assistant_type == 3:
         create_action(assistant_id)
@@ -455,7 +500,7 @@ def get_action_data(assistant_id):
         pass
     else:
         assistant.activity_status = 1
-    
+    print("get_action_data tamamlandı")
     assistant.update_time = datetime.now(timezone.utc)
     assistant.save()
 
@@ -463,35 +508,42 @@ def get_action_data(assistant_id):
 def volta():
     #takes all assistants
     all_assistants = Assistants.objects.filter(activity_status = 1)
+    print('assistanlar kontrol ediliyor')
     for i in all_assistants:
         #select an assistant from list and check it
         assistant_time_status = check_assistant_is_ready(i.id)
-        print(i.assistant_type,i.instagram_account,assistant_time_status)
         if assistant_time_status == False:
+            print('asistan hazır değil')
             pass
         else:
+            print('asistan hazır')
             i.activity_status = 9
             i.update_time = datetime.now(timezone.utc)
             i.save()
             assistant_type = i.assistant_type
             if assistant_type == 0:
+                print("Follow asistanı")
                 action_name=Follow_Actions
             elif assistant_type == 1:
+                print("Like asistanı")
                 action_name=Like_Actions
             elif assistant_type == 2:
+                print("Yorum asistanı")
                 action_name=Comment_Actions
             elif assistant_type == 3:
+                print("Unfollow asistanı")
                 action_name = Unfollow_Actions
                 white_list = White_List_Users.objects.filter(instagram_account=i.instagram_account)
                 i.number_of_actions = i.number_of_actions - len(white_list)
             if len(action_name.objects.filter(assistant = i,status = 1)) >= i.number_of_actions:
-                    i.activity_status = 2
-                    i.save()
+                print("Asistan tamamlandı") 
+                i.activity_status = 2
+                i.save()
             else:
                 current_datas = action_name.objects.filter(assistant = i,status = 0)
-                if assistant_type == 3:
-                    current_datas =  action_name.objects.filter(assistant = i,status = 9)
-                if len(current_datas)==0:
+                current_datas_9 = action_name.objects.filter(assistant = i,status = 9)
+                if len(current_datas) + len(current_datas_9) == 0:
+                    print("yeterince action yok")
                     api_errors = Api_Error.objects.filter(assistant__instagram_account__username = i.instagram_account.username).order_by('-update_time')
                     if len(api_errors)>0:
                         try:
@@ -510,13 +562,17 @@ def volta():
                             working_assistant.update_time = datetime.now(timezone.utc)
                             working_assistant.save()
                     else:
+                        print("get_action_data çağırılıyor")
                         get_action_data.apply_async(queue="deneme1",args=[i.id])
 
                 else:
+                    print("Yeterince action var")
                     filtered_users = action_name.objects.filter(assistant = i ,status = 9)
                     if len(filtered_users)>=1:
+                        print("Eylem hazırlandı execute ediliyor")
                         executioner.apply_async(queue = "deneme1",args=[i.id])
                     else:
+                        print("filtrelemeye gönderiliyor")
                         prepare_filtered_users.apply_async(queue="deneme1",args=[i.id])
 
 

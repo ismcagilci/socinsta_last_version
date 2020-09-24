@@ -93,7 +93,10 @@ def get_assistants_details(user):
             assistants_list.append((i.number_of_actions,percentage_of_process,i.assistant_type,i.source_type,ig_username,target_location,status,"z","Yorum_Lokasyon",i.id,i.is_there_enough_data))
     if latest_unfollow_assistant:
         i = latest_unfollow_assistant.latest("update_time")
-        percentage_of_process=len(Unfollow_Actions.objects.filter(status=1,assistant = i))/i.number_of_actions*100
+        if i.number_of_actions != 0:
+            percentage_of_process=len(Unfollow_Actions.objects.filter(status=1,assistant = i))/i.number_of_actions*100
+        else:
+            percentage_of_process = 100
         percentage_of_process=round(percentage_of_process)
         target_username="@"+i.instagram_account.username
         ig_username="@"+i.instagram_account.username

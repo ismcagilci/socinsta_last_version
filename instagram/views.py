@@ -578,6 +578,7 @@ def create_assistant(request):
 
 @login_required(login_url='/login/')
 def unfollow(request):
+
     ig_accounts_list = functions.get_linked_accounts(request.user)
     active_ig_account = Instagram_Accounts.objects.filter(is_current_account=1,main_user = request.user)
     if len(active_ig_account) == 0:
@@ -589,8 +590,7 @@ def unfollow(request):
             post = request.POST.copy()
             noa = post.get('number_of_actions')
             noa = int(noa)
-            if noa > ig_account_analyse.following_count:
-                noa = ig_account_analyse.following_count
+            
             is_default = post.get("is_default")
             speed = post.get('speed')
             unfollow_assistant = Assistants(instagram_account=active_ig_account,number_of_actions = noa,activity_status= 1,update_time = datetime.now(timezone.utc),assistant_type=3,source=active_ig_account.username)
@@ -618,6 +618,6 @@ def unfollow(request):
             unfollow_assistant2 = Assistants.objects.filter(instagram_account=active_ig_account,assistant_type=3,activity_status=9)
 
             if len(unfollow_assistant) + len(unfollow_assistant2) == 0:
-                return render(request,"unfollow.html")
+                return render(request,"unfollow.html",{"ig_accounts":ig_accounts_list})
             else:
                 return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Asistan zaten aktif!')"})
