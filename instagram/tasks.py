@@ -693,7 +693,7 @@ def Analyse_Beat():
         iaa = Instagram_Accounts_Analyse.objects.filter(instagram_account = i)
         if len(iaa) ==0:
             analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
-        elif datetime.now(timezone.utc)-iaa.latest("update_time").update_time >= timedelta(days=1):
+        elif datetime.now(timezone.utc)-iaa.latest("update_time").update_time >= timedelta(hours=1):
             analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
         else:
             continue
