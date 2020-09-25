@@ -108,7 +108,7 @@ def register(request):
             user = authenticate(request,username=email_main, password=password)
             login(request,user)
             #Create License
-            newLicense=License(main_user=user,package= Package.objects.filter(name='temel')[0],status=1)
+            newLicense=License(main_user=user,package= Package.objects.filter(name='deneme')[0],status=1)
             newLicense.save()
             
             return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","pop_up":"account_verification()","license_data":functions.license_data(request.user),"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
