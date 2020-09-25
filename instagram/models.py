@@ -97,6 +97,7 @@ class Assistants(models.Model):
 
 class Api_Error(models.Model):
     assistant=models.ForeignKey(Assistants,on_delete=models.CASCADE,null=True)
+    instagram_account = models.ForeignKey(Instagram_Accounts,on_delete=models.CASCADE,null=True)
     api_error_mean = models.CharField(max_length=200,verbose_name="Hata kaynağı", null=True)
     error_action_type = models.IntegerField(verbose_name="Hangi eylemi yaparken hata verdi",null=True)
     error_source = models.CharField(max_length=200,verbose_name="Hatanın olduğu fonksiyon", null=True)

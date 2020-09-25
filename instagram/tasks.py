@@ -746,10 +746,21 @@ def analyse_ig_account(username):
 @task
 def Analyse_Beat():
     for i in Instagram_Accounts.objects.filter():
+        print("Analyse ediliyor")
         iaa = Instagram_Accounts_Analyse.objects.filter(instagram_account = i)
-        if len(iaa) ==0:
-            analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
-        elif datetime.now(timezone.utc)-iaa.latest("update_time").update_time >= timedelta(hours=1):
-            analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
+        all_api_errors = Api_Error.objects.filter(instagram_account=i).order_by('-update_time')[:10]
+        error_count = len(all_api_errors)
+        passing_time = 1
+        if error_count != 0:
+            passing_time = (datetime.now(timezone.utc)-all_api_errors[0].update_time).seconds
+        if passing_time > error_count*300:
+            print("Analize gönderiliyor")
+            if len(iaa) ==0:
+                analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
+            elif datetime.now(timezone.utc)-iaa.latest("update_time").update_time >= timedelta(hours=1):
+                analyse_ig_account.apply_async(queue="deneme1",args=[i.username])
+            else:
+                print("Analiz güncel olduğu için pass geçiliyor ")
+                continue
         else:
-            continue
+            print("Api error bekleme zamanı dolmadığı için analiz işlemi pass geçildi")

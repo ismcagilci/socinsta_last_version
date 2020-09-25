@@ -232,7 +232,8 @@ def get_user_pk(username, api):
         info = api.username_info(username)
         pk = info.get("user").get("pk")
     except Exception as e:
-        api_error = Api_Error(error_action_type = 10,api_error_mean = str(e),error_source = "get_user_pk")
+        active_ig_account = Instagram_Accounts.objects.filter(username = username)[0]
+        api_error = Api_Error(error_action_type = 10,api_error_mean = str(e),error_source = "get_user_pk",instagram_account=active_ig_account)
         api_error.save()
         pk = 0
     return pk
@@ -245,14 +246,19 @@ def get_user_all_posts(username, api):
     rank_token = api.generate_uuid()
 
     user_posts = []
-    results = api.user_feed(user_pk, rank_token=rank_token)
-    user_posts.extend(results.get('items', []))
-    next_max_id = results.get('next_max_id')
-    while next_max_id:
-        results = api.user_feed(user_pk, rank_token=rank_token, max_id=next_max_id)
+    try:
+        results = api.user_feed(user_pk, rank_token=rank_token)
         user_posts.extend(results.get('items', []))
         next_max_id = results.get('next_max_id')
-    return user_posts
+        while next_max_id:
+            results = api.user_feed(user_pk, rank_token=rank_token, max_id=next_max_id)
+            user_posts.extend(results.get('items', []))
+            next_max_id = results.get('next_max_id')
+        return user_posts
+    except Exception as e:
+        active_ig_account = Instagram_Accounts.objects.filter(username=username)[0]
+        api_error = Api_Error(instagram_account=active_ig_account,error_action_type = 5,api_error_mean = str(e),error_source = "get user all posts")
+        api_error.save()
 
 def get_like_count(user_posts):
     like_count = 0
