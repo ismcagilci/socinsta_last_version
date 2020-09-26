@@ -581,145 +581,149 @@ def volta():
 
 @shared_task
 def analyse_ig_account(username):
-    instagram_account = Instagram_Accounts.objects.filter(username=username)[0]
-    password = instagram_account.password
+    try:
+        instagram_account = Instagram_Accounts.objects.filter(username=username)[0]
+        password = instagram_account.password
+        
+        """Instagram_Accounts_Analyse"""
+        #call api
+        # api=private_api.login_instagram_web_api(username,password)
+        api=private_api.login_instagram(username,password)
+
+        #Get the Post datas of the account
+        user_posts = private_api.get_user_all_posts(username,api)
+        like_count = private_api.get_like_count(user_posts)
+        comment_count = private_api.get_comment_count(user_posts)
+
+        #Get the general datas of the account
+        info = api.username_info(username)
+        user_pk=info.get('user').get('pk')
+        username=info.get('user').get('username')
+        full_name=info.get('user').get('full_name')
+        is_private=info.get('user').get('is_private')
+        profile_pic_url=info.get('user').get('profile_pic_url')
+        media_count=info.get('user').get('media_count')
+        follower_count=info.get('user').get('follower_count')
+        following_count=info.get('user').get('following_count')
+        biography=info.get('user').get('biography')
+        is_business=info.get('user').get('is_business')
     
-    """Instagram_Accounts_Analyse"""
-    #call api
-    # api=private_api.login_instagram_web_api(username,password)
-    api=private_api.login_instagram(username,password)
-
-    #Get the Post datas of the account
-    user_posts = private_api.get_user_all_posts(username,api)
-    like_count = private_api.get_like_count(user_posts)
-    comment_count = private_api.get_comment_count(user_posts)
-
-    #Get the general datas of the account
-    info = api.username_info(username)
-    user_pk=info.get('user').get('pk')
-    username=info.get('user').get('username')
-    full_name=info.get('user').get('full_name')
-    is_private=info.get('user').get('is_private')
-    profile_pic_url=info.get('user').get('profile_pic_url')
-    media_count=info.get('user').get('media_count')
-    follower_count=info.get('user').get('follower_count')
-    following_count=info.get('user').get('following_count')
-    biography=info.get('user').get('biography')
-    is_business=info.get('user').get('is_business')
-   
-    #Create a new IG_Account Analysis Object and Save
-    ig_account_analysis = Instagram_Accounts_Analyse(instagram_account=instagram_account, media_count=media_count,like_count=like_count,comment_count=comment_count,follower_count=follower_count,following_count=following_count,update_time=datetime.now(timezone.utc))
-    ig_account_analysis.save()
-    
+        #Create a new IG_Account Analysis Object and Save
+        ig_account_analysis = Instagram_Accounts_Analyse(instagram_account=instagram_account, media_count=media_count,like_count=like_count,comment_count=comment_count,follower_count=follower_count,following_count=following_count,update_time=datetime.now(timezone.utc))
+        ig_account_analysis.save()
+        
 
 
-    #Update instagram account object with the new datas 
-    instagram_account.full_name = full_name
-    instagram_account.is_private= is_private
-    instagram_account.profile_pic_url= profile_pic_url
-    instagram_account.biography= biography
-    instagram_account.is_business = is_business
-    instagram_account.save()
-    
+        #Update instagram account object with the new datas 
+        instagram_account.full_name = full_name
+        instagram_account.is_private= is_private
+        instagram_account.profile_pic_url= profile_pic_url
+        instagram_account.biography= biography
+        instagram_account.is_business = is_business
+        instagram_account.save()
+        
 
-    """AnalyseFF Part"""
-    #Get List of User Followers
-    user_followers = []
-    rank_token=api.generate_uuid()
-    next_max_id =''
-    user_pk = private_api.get_user_pk(username,api)
-    results = api.user_followers(user_pk,rank_token)
-    user_followers.extend(results.get('users', []))
-
-    next_max_id = results.get('next_max_id')
-    while next_max_id:
-        results = api.user_followers(user_pk,rank_token,max_id = next_max_id)
+        """AnalyseFF Part"""
+        #Get List of User Followers
+        user_followers = []
+        rank_token=api.generate_uuid()
+        next_max_id =''
+        user_pk = private_api.get_user_pk(username,api)
+        results = api.user_followers(user_pk,rank_token)
         user_followers.extend(results.get('users', []))
+
         next_max_id = results.get('next_max_id')
+        while next_max_id:
+            results = api.user_followers(user_pk,rank_token,max_id = next_max_id)
+            user_followers.extend(results.get('users', []))
+            next_max_id = results.get('next_max_id')
 
-    #User Followers Analyses /
-    for i in user_followers: 
-        pk = i.get('pk')
-        username = i.get('username')
-        full_name = i.get('full_name')
-        is_private = i.get('is_private')
-        profile_pic_url = i.get('profile_pic_url')
-        has_anonymous_profile_picture = i.get('has_anonymous_profile_picture')
+        #User Followers Analyses /
+        for i in user_followers: 
+            pk = i.get('pk')
+            username = i.get('username')
+            full_name = i.get('full_name')
+            is_private = i.get('is_private')
+            profile_pic_url = i.get('profile_pic_url')
+            has_anonymous_profile_picture = i.get('has_anonymous_profile_picture')
 
-        #Check IG_Users object if not exist create one.
-        try:
-            user_object = IG_Users.objects.filter(username = username)[0]
-            user_object.pk_number = pk 
-            user_object.full_name =full_name
-            user_object.is_private=is_private
-            user_object.profile_pic_url=profile_pic_url
-            user_object.has_anonymous_profile_picture=has_anonymous_profile_picture
-            user_object.save()
+            #Check IG_Users object if not exist create one.
+            try:
+                user_object = IG_Users.objects.filter(username = username)[0]
+                user_object.pk_number = pk 
+                user_object.full_name =full_name
+                user_object.is_private=is_private
+                user_object.profile_pic_url=profile_pic_url
+                user_object.has_anonymous_profile_picture=has_anonymous_profile_picture
+                user_object.save()
 
-        except:
-            user_object = IG_Users(username = username,pk_number=pk,full_name =full_name,is_private=is_private,profile_pic_url=profile_pic_url,has_anonymous_profile_picture=has_anonymous_profile_picture)
-            user_object.save()
-        
-        #Check if there is an analyse ff objects for this user
-        try:
-            user = Analyse_FF.objects.filter(instagram_account=instagram_account,ig_user = user_object)[0]
-            if not user.is_follower == 1:
-                user.is_follower = 1
-                user.follower_update_time = datetime.now(timezone.utc)
-                user.save()
+            except:
+                user_object = IG_Users(username = username,pk_number=pk,full_name =full_name,is_private=is_private,profile_pic_url=profile_pic_url,has_anonymous_profile_picture=has_anonymous_profile_picture)
+                user_object.save()
+            
+            #Check if there is an analyse ff objects for this user
+            try:
+                user = Analyse_FF.objects.filter(instagram_account=instagram_account,ig_user = user_object)[0]
+                if not user.is_follower == 1:
+                    user.is_follower = 1
+                    user.follower_update_time = datetime.now(timezone.utc)
+                    user.save()
 
-        except:
-            Analyse=Analyse_FF(instagram_account=instagram_account,ig_user = user_object,is_follower=1,is_following = 0,follower_update_time = datetime.now(timezone.utc))
-            Analyse.save()
+            except:
+                Analyse=Analyse_FF(instagram_account=instagram_account,ig_user = user_object,is_follower=1,is_following = 0,follower_update_time = datetime.now(timezone.utc))
+                Analyse.save()
 
-    #Get List of User Followings
-    user_followings = []
-    rank_token=api.generate_uuid()
-    next_max_id =''
-    results = api.user_following(user_pk,rank_token)
-    user_followings.extend(results.get('users', []))
-
-    next_max_id = results.get('next_max_id')
-    while next_max_id:
-        results = api.user_following(user_pk,rank_token,max_id = next_max_id)
+        #Get List of User Followings
+        user_followings = []
+        rank_token=api.generate_uuid()
+        next_max_id =''
+        results = api.user_following(user_pk,rank_token)
         user_followings.extend(results.get('users', []))
+
         next_max_id = results.get('next_max_id')
-    
-    #User Followings Analyses /
-    for i in user_followings: 
-        pk = i.get('pk')
-        username = i.get('username')
-        full_name = i.get('full_name')
-        is_private = i.get('is_private')
-        profile_pic_url = i.get('profile_pic_url')
-        has_anonymous_profile_picture = i.get('has_anonymous_profile_picture')
-
-        #Check IG_Users object if not exist create one.
-        try:
-            user_object = IG_Users.objects.get(username = username)
-            user_object.pk_number = pk 
-            user_object.full_name =full_name
-            user_object.is_private=is_private
-            user_object.profile_pic_url=profile_pic_url
-            user_object.has_anonymous_profile_picture=has_anonymous_profile_picture
-            user_object.save()
-
-        except:
-            user_object = IG_Users(username = username,pk_number=pk, full_name =full_name,is_private=is_private,profile_pic_url=profile_pic_url,has_anonymous_profile_picture=has_anonymous_profile_picture)
-            user_object.save()
+        while next_max_id:
+            results = api.user_following(user_pk,rank_token,max_id = next_max_id)
+            user_followings.extend(results.get('users', []))
+            next_max_id = results.get('next_max_id')
         
-        #Check if there is an analyse ff objects for this user
-        try:
-            user = Analyse_FF.objects.filter(instagram_account=instagram_account,ig_user = user_object)[0]
-            if not user.is_following == 1:
-                user.is_following = 1
-                user.following_update_time = datetime.now(timezone.utc)
-                user.save()
+        #User Followings Analyses /
+        for i in user_followings: 
+            pk = i.get('pk')
+            username = i.get('username')
+            full_name = i.get('full_name')
+            is_private = i.get('is_private')
+            profile_pic_url = i.get('profile_pic_url')
+            has_anonymous_profile_picture = i.get('has_anonymous_profile_picture')
 
-        except:
-            Analyse=Analyse_FF(instagram_account=instagram_account,ig_user = user_object,is_following=1,is_follower = 0,following_update_time = datetime.now(timezone.utc))
-            Analyse.save() 
+            #Check IG_Users object if not exist create one.
+            try:
+                user_object = IG_Users.objects.get(username = username)
+                user_object.pk_number = pk 
+                user_object.full_name =full_name
+                user_object.is_private=is_private
+                user_object.profile_pic_url=profile_pic_url
+                user_object.has_anonymous_profile_picture=has_anonymous_profile_picture
+                user_object.save()
 
+            except:
+                user_object = IG_Users(username = username,pk_number=pk, full_name =full_name,is_private=is_private,profile_pic_url=profile_pic_url,has_anonymous_profile_picture=has_anonymous_profile_picture)
+                user_object.save()
+            
+            #Check if there is an analyse ff objects for this user
+            try:
+                user = Analyse_FF.objects.filter(instagram_account=instagram_account,ig_user = user_object)[0]
+                if not user.is_following == 1:
+                    user.is_following = 1
+                    user.following_update_time = datetime.now(timezone.utc)
+                    user.save()
+
+            except:
+                Analyse=Analyse_FF(instagram_account=instagram_account,ig_user = user_object,is_following=1,is_follower = 0,following_update_time = datetime.now(timezone.utc))
+                Analyse.save() 
+    except Exception as e:
+        active_ig_account = Instagram_Accounts.objects.filter(username=username)[0]
+        api_error = Api_Error(instagram_account=active_ig_account,error_action_type = 15,api_error_mean = str(e),error_source = "analyse ig account")
+        api_error.save()
 
 
 

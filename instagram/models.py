@@ -103,7 +103,7 @@ class Api_Error(models.Model):
     error_source = models.CharField(max_length=200,verbose_name="Hatanın olduğu fonksiyon", null=True)
     update_time = models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
     def __str__(self):
-        return self.assistant.instagram_account.username
+        return self.instagram_account.username
 
 class Assistants_Settings(models.Model):
     """Keeps all assistants' settings"""

@@ -43,6 +43,13 @@ class Api_ErrorAdmin(admin.ModelAdmin):
     list_display = ("assistant","api_error_mean","error_source","update_time")
 
 admin.site.register(Api_Error,Api_ErrorAdmin)
+
+class Unfollow_ActionsAdmin(admin.ModelAdmin):
+    list_display = ["ig_user","status","instagram_account","update_time"]
+
+admin.site.register(Unfollow_Actions,Unfollow_ActionsAdmin)
+
+
 admin.site.register(Challenge_User)
 admin.site.register(Volta)
 admin.site.register(Instagram_Accounts)
@@ -54,5 +61,4 @@ admin.site.register(User_Sources)
 admin.site.register(Hashtag_Sources)
 admin.site.register(Location_Sources)
 admin.site.register(White_List_Users)
-admin.site.register(Unfollow_Actions)
 admin.site.register(White_List_Assistant)
