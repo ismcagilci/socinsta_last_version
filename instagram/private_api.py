@@ -58,7 +58,7 @@ def check_is_real(main_user,username, password,challenge_code,sms_or_mail):
         return 10
     elif sms_or_mail == 2:
         try:
-            new_api = Client(username = username, password = password)
+            new_api = Client(username = username, password = password,proxy="https://wahow:i159753@64.227.107.38:3128")
             deneme = new_api.username_info(username)
             print(deneme)
             print("oğğğğğğğğ")
@@ -79,11 +79,11 @@ def check_is_real(main_user,username, password,challenge_code,sms_or_mail):
             print(e.args[0],"jajdajsdj")
     else:
         if challenge_code == 2:
-            new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail)
+            new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy="https://wahow:i159753@64.227.107.38:3128")
             return 8
         else:
             try:
-                new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail)
+                new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy="https://wahow:i159753@64.227.107.38:3128")
                 deneme = new_api.username_info(username)
                 return new_api
             except urllib.error.HTTPError as err:
@@ -161,7 +161,7 @@ def login_instagram_web_api(username,password):
     try:
         if len(api_settings) == 0:
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password)
+    username=username, password=password,proxy="https://wahow:i159753@64.227.107.38:3128")
             create_cookie_web_api(api.settings, username)
         else:
             settings = api_settings[0].settings
@@ -169,13 +169,13 @@ def login_instagram_web_api(username,password):
             settings = json.loads(settings)
             settings["cookie"] = cookie
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,settings = settings)
+    username=username, password=password,settings = settings,proxy="https://wahow:i159753@64.227.107.38:3128")
     except:
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
         api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password)
+    username=username, password=password,proxy="https://wahow:i159753@64.227.107.38:3128")
         create_cookie_web_api(api, username)
 
     return api
@@ -185,7 +185,7 @@ def login_instagram(username, password):
     api_settings = Api_Settings.objects.filter(instagram_account__username=username)
     try:
         if len(api_settings) == 0:
-            api = Client(username, password)
+            api = Client(username, password,proxy="https://wahow:i159753@64.227.107.38:3128")
             rank_token = Client.generate_uuid()
             create_cookie(api.settings, username, rank_token)
 
@@ -197,7 +197,7 @@ def login_instagram(username, password):
             device_id = settings.get('device_id')
             api = Client(
                 username, password,
-                settings=settings)
+                settings=settings,proxy="https://wahow:i159753@64.227.107.38:3128")
 
     except (ClientCookieExpiredError, ClientLoginRequiredError) as e:
         print('ClientCookieExpiredError/ClientLoginRequiredError: {0!s}'.format(e))
@@ -205,7 +205,7 @@ def login_instagram(username, password):
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
-        api = Client(username, password, device_id=device_id)
+        api = Client(username, password, device_id=device_id,proxy="https://wahow:i159753@64.227.107.38:3128")
         rank_token = Client.generate_uuid()
         create_cookie(api, username,rank_token)
 
