@@ -181,18 +181,18 @@ def executioner(assistant_id):
         try:
             api.friendships_create(pk_number)
             follow_action.status = 1
-            follow_action.assistan = assistant
+            follow_action.assistant = assistant
             follow_action.update_time = datetime.now(timezone.utc)
             follow_action.save()
         except Exception as e:
             if str(e) == "Expecting value: line 1 column 1 (char 0)":
                 follow_action.status = 3
-                follow_action.assistan = assistant
+                follow_action.assistant = assistant
                 follow_action.update_time = datetime.now(timezone.utc)
                 follow_action.save()
             else:
                 follow_action.status = 2
-                follow_action.assistan = assistant
+                follow_action.assistant = assistant
                 follow_action.update_time = datetime.now(timezone.utc)
                 follow_action.save()
             api_error = Api_Error(assistant = assistant,error_action_type = 7,api_error_mean = str(e),error_source = "executioner_follow")
@@ -203,18 +203,18 @@ def executioner(assistant_id):
         try:
             api.post_like(str(post_pk))
             like_action.status = 1
-            like_action.assistan = assistant
+            like_action.assistant = assistant
             like_action.update_time = datetime.now(timezone.utc)
             like_action.save()
         except Exception as e:
             if str(e) == "Expecting value: line 1 column 1 (char 0)":
                 like_action.status = 3
-                like_action.assistan = assistant
+                like_action.assistant = assistant
                 like_action.update_time = datetime.now(timezone.utc)
                 like_action.save()
             else:
                 like_action.status = 2
-                like_action.assistan = assistant
+                like_action.assistant = assistant
                 like_action.update_time = datetime.now(timezone.utc)
                 like_action.save()
             api_error = Api_Error(assistant = assistant,error_action_type = 8,api_error_mean = str(e),error_source = "executioner_like")
@@ -226,18 +226,18 @@ def executioner(assistant_id):
         try:
             api.post_comment(str(post_pk),comment_text)
             comment_action.status = 1
-            comment_action.assistan = assistant
+            comment_action.assistant = assistant
             comment_action.update_time = datetime.now(timezone.utc)
             comment_action.save()
         except Exception as e:
             if str(e) == "Expecting value: line 1 column 1 (char 0)":
                 comment_action.status = 3
-                comment_action.assistan = assistant
+                comment_action.assistant = assistant
                 comment_action.update_time = datetime.now(timezone.utc)
                 comment_action.save()
             else:
                 comment_action.status = 2
-                comment_action.assistan = assistant
+                comment_action.assistant = assistant
                 comment_action.update_time = datetime.now(timezone.utc)
                 comment_action.save()
             api_error = Api_Error(assistant = assistant,error_action_type = 9,api_error_mean = str(e),error_source = "executioner_comment")
@@ -255,12 +255,12 @@ def executioner(assistant_id):
         except Exception as e:
             if str(e) == "Expecting value: line 1 column 1 (char 0)":
                 unfollow_action.status = 3
-                unfollow_action.assistan = assistant
+                unfollow_action.assistant = assistant
                 unfollow_action.update_time = datetime.now(timezone.utc)
                 unfollow_action.save()
             else:
                 unfollow_action.status = 2
-                unfollow_action.assistan = assistant
+                unfollow_action.assistant = assistant
                 unfollow_action.update_time = datetime.now(timezone.utc)
                 unfollow_action.save()
             api_error = Api_Error(assistant = assistant,error_action_type = 10,api_error_mean = str(e),error_source = "executioner_unfollow")
