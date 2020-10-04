@@ -388,7 +388,7 @@ def check_user_actions(raw_results, assistant_id):
                                 new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                                 new_action.save()
                         except Exception as e:
-                            api_error = Api_Error(assistant = assistant,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
+                            api_error = Api_Error(instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
                             api_error.save()
                     else:
                         pass
@@ -410,7 +410,7 @@ def check_user_actions(raw_results, assistant_id):
                                     new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                                     new_action.save()
                             except Exception as e:
-                                api_error = Api_Error(assistant = assistant,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
+                                api_error = Api_Error(instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
                                 api_error.save()
                         else:
                             pass
@@ -434,7 +434,7 @@ def check_user_actions(raw_results, assistant_id):
                             new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                             new_action.save()
                     except Exception as e:
-                        api_error = Api_Error(assistant = assistant,error_action_type = 4,api_error_mean = str(e),error_source = "check_user_actions2")
+                        api_error = Api_Error(instagram_account = instagram_account,error_action_type = 4,api_error_mean = str(e),error_source = "check_user_actions2")
                         api_error.save()
                 else:
                     pass
@@ -455,7 +455,7 @@ def check_user_actions(raw_results, assistant_id):
                                 new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                                 new_action.save()
                         except Exception as e:
-                            api_error = Api_Error(assistant = assistant,error_action_type = 4,api_error_mean = str(e),error_source = "check_user_actions2")
+                            api_error = Api_Error(instagram_account = instagram_account,error_action_type = 4,api_error_mean = str(e),error_source = "check_user_actions2")
                             api_error.save()
                     else:
                         pass
@@ -498,7 +498,7 @@ def get_user_followings_simple(assistant_id):
         return user_followings
     except Exception as e:
         assistant = Assistants.objects.filter(id = assistant_id)[0]
-        api_error = Api_Error(assistant = assistant,error_action_type = 12,api_error_mean = str(e),error_source = "get_user_followings_simple")
+        api_error = Api_Error(instagram_account = instagram_account,error_action_type = 12,api_error_mean = str(e),error_source = "get_user_followings_simple")
         api_error.save()
         return False
 
@@ -513,7 +513,7 @@ def get_user_followers(rank_token, username, api, max_id,assistant):
             results = api.user_followers(user_id, rank_token=rank_token)
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 0,api_error_mean = str(e),error_source = "get_user_followers")
+        api_error = Api_Error(instagram_account = instagram_account,error_action_type = 0,api_error_mean = str(e),error_source = "get_user_followers")
         api_error.save()
         return False
 
@@ -527,7 +527,7 @@ def get_user_followings(rank_token, username, api, max_id,assistant):
             results = api.user_following(user_id, rank_token=rank_token)
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 1, api_error_mean= str(e),error_source = "get_user_followings")
+        api_error = Api_Error(instagram_account = instagram_account,error_action_type = 1, api_error_mean= str(e),error_source = "get_user_followings")
         api_error.save()
         return False
 
@@ -542,7 +542,7 @@ def get_user_posts(rank_token, username, api, max_id,assistant):
             results = api.user_feed(user_pk, rank_token=rank_token)
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 5,api_error_mean= str(e),error_source = "get_user_posts")
+        api_error = Api_Error(instagram_account = instagram_account,error_action_type = 5,api_error_mean= str(e),error_source = "get_user_posts")
         api_error.save()
         return False
 
@@ -555,7 +555,7 @@ def get_hashtag_posts(rank_token, hashtag, api, max_id,assistant):
             results = api.feed_tag(hashtag,rank_token)
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 4,api_error_mean= str(e),error_source = "get_hashtag_posts")
+        api_error = Api_Error(instagram_account = assistant.instagram_account,error_action_type = 4,api_error_mean= str(e),error_source = "get_hashtag_posts")
         api_error.save()
         return False
 
@@ -564,7 +564,7 @@ def get_post_likers(next_post_id,api,assistant):
         results = api.media_likers(next_post_id)
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 2,api_error_mean= str(e),error_source = "get_post_likers")
+        api_error = Api_Error(instagram_account = assistant.instagram_account,error_action_type = 2,api_error_mean= str(e),error_source = "get_post_likers")
         api_error.save()
         return False
 
@@ -581,7 +581,7 @@ def get_post_commenters(next_post_id,api,post_data,assistant):
         post_data.save()
         return results
     except Exception as e:
-        api_error = Api_Error(assistant = assistant,error_action_type = 3,api_error_mean= str(e),error_source = "get_post_commenters")
+        api_error = Api_Error(instagram_account = assistant.instagram_account,error_action_type = 3,api_error_mean= str(e),error_source = "get_post_commenters")
         api_error.save()
         return False
 

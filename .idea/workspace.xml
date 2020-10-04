@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9cedf4f4-ecba-4484-a222-50f8afd19dbb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/instagram/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/instagram/tasks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +29,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -87,6 +88,16 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="451" y="192" key="SettingsEditor" timestamp="1601715972346">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="451" y="192" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1601715972346" />
+    <state x="505" y="369" key="com.intellij.ide.util.TipDialog" timestamp="1601771311505">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="505" y="369" key="com.intellij.ide.util.TipDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1601771311505" />
   </component>
   <component name="masterDetails">
     <states>
