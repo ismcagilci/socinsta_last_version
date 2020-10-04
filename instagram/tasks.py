@@ -155,6 +155,9 @@ def check_assistant_is_ready(assistant_id):
 
 
     # Son işlem başarılıysa geçen süreye bakar.
+    if len(action_name.objects.filter(assistant=assistant).order_by('-update_time'))==0: 
+        return True
+
     latest_actions = action_name.objects.filter(assistant=assistant).order_by('-update_time')[0]
     if latest_actions.status == 1:
         random_waiting = random.randint(1, 5)
