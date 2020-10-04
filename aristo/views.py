@@ -52,23 +52,29 @@ def login_user(request):
                 return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","user":request.user,"pop_up":"confirmation_message3()","ig_accounts":ig_accounts_list,"assistants_list":check_linked_assistants_list,"license_data":functions.license_data(request.user),"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
             return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","user":request.user,"pop_up":"confirmation_message2()","ig_accounts":ig_accounts_list,"assistants_list":check_linked_assistants_list,"license_data":functions.license_data(request.user),"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
     return render(request,"login.html",{"x":"none"})
-
+@login_required(login_url='/login/') 
 def contact(request):
     if request.POST:
         name = request.POST["name"]
         surname = request.POST["surname"]
         gsm_no = request.POST["gsm_no"]
+        if gsm_no == None:
+            gsm_no = 0
         email = request.POST["email"]
         message = request.POST["message"]
         contact_form = Contact_Form(main_user=request.user,gsm_no = gsm_no,email = email,message = message,name = name,surname = surname)
         contact_form.save()
         send_mail("Mesaj gönderme tamamlandı","Socinsta olarak en kısa zamanda dönüş yapıyoruz ... ","socinstaapp@gmail.com",[email])
         send_mail(email + " adlı hesaptan yeni mesaj alındı",message,"socinstaapp@gmail.com",["bedriyan@gmail.com","ismcagilci@gmail.com"])
-    if request.user.is_authenticated:
-        ig_accounts_list=functions.get_linked_accounts(request.user)
-        return render(request,"contact.html",{"ig_accounts":ig_accounts_list})
+        return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","pop_up":"message_was_sent_successfully()","license_data":functions.license_data(request.user),"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
+
     else:
-         return render(request,"contact.html")
+
+        if request.user.is_authenticated:
+            ig_accounts_list=functions.get_linked_accounts(request.user)
+            return render(request,"contact.html",{"ig_accounts":ig_accounts_list})
+        else:
+            return render(request,"contact.html")
 
 def register(request):
     if request.POST:

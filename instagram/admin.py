@@ -40,7 +40,7 @@ class Post_DatasAdmin(admin.ModelAdmin):
 admin.site.register(Post_Datas,Post_DatasAdmin)
 
 class Api_ErrorAdmin(admin.ModelAdmin):
-    list_display = ("assistant","api_error_mean","error_source","update_time")
+    list_display = ("instagram_account","assistant","api_error_mean","error_source","update_time")
 
 admin.site.register(Api_Error,Api_ErrorAdmin)
 

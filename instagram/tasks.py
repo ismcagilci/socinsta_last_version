@@ -168,7 +168,6 @@ def check_assistant_is_ready(assistant_id):
     if len(action_name.objects.filter(status=2).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) +\
             len(action_name.objects.filter(status=3).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1)))>= hourly_error_limit:
         return False
-
     else:
         return True
 
