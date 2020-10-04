@@ -269,11 +269,11 @@
                                     <form method="POST" action="/add_insta_account" class="col s12">
                                         {% csrf_token %}
                                         <div class="row">
-                                            <div class="input-field">
+                                            <div class="input-field" >
                                                 <i class="material-icons prefix active">account_circle</i>
-                                                <input disabled="" value="{{ig_user}}" id="disabled" type="text" class="validate" style="display: {{ig_username_disabled}};"> {% if ig_username_disabled == "block" %}
-                                                <input name="instagram_username" value="{{ig_user}}" type="text" style="display: {{ig_username}};"> {% else %}
-                                                <input name="instagram_username" id="name3" type="text" style="display: {{ig_username}};"> {% endif %}
+                                                <input disabled="" value="{{ig_user}}" id="disabled" type="text" class="validate" style="display: {{ig_username_disabled}};" required> {% if ig_username_disabled == "block" %}
+                                                <input name="instagram_username" value="{{ig_user}}" type="text" style="display: {{ig_username}};" required> {% else %}
+                                                <input name="instagram_username" id="name3" type="text" style="display: {{ig_username}};" required> {% endif %}
     
                                                 <label for="name3">Kullanıcı Adı</label>
                                             </div>
@@ -282,12 +282,34 @@
                                         <div class="row">
                                             <div class="input-field">
                                                 <i class="material-icons prefix active">lock_outline</i>
-                                                <input disabled="" value="{{ig_user_password}}" id="disabled2" type="password" class="validate" style="display: {{ig_username_disabled}};"> {% if ig_username_disabled == "block" %}
-                                                <input name="instagram_password" value="{{ig_user_password}}" type="password" style="display: {{ig_username}};"> {% else %}
-                                                <input name="instagram_password" id="password4" type="password" style="display: {{ig_username}};"> {% endif %}
+                                                <input disabled="" value="{{ig_user_password}}" id="disabled2" type="password" class="validate" style="display: {{ig_username_disabled}};" required> {% if ig_username_disabled == "block" %}
+                                                <input name="instagram_password" value="{{ig_user_password}}" type="password" style="display: {{ig_username}};" required> {% else %}
+                                                <input name="instagram_password" id="password4" type="password" style="display: {{ig_username}};" required> {% endif %}
     
                                                 <label for="password4">Şifre</label>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field">
+                                                
+                                                {% if current_proxy|length != 0 %}
+                                                <select class="icons" name="selected_proxy_id">
+                                                      
+                                                    <option value="{{current_proxy.0.id}}" >{{current_proxy.0.location}}</option>
+                                                    
+                                                  </select>
+                                                {% else %}
+                                                <select class="icons" name="selected_proxy_id">
+                                                  
+                                                    {% for server in all_proxies  %}
+                                                    <option value="{{server.id}}">{{server.location}}</option>
+                                                    {% endfor %}
+                                                  </select>
+                                                {% endif %}
+                                                    
+                                                
+                                                <label>Server Listesi</label>
+                                              </div>
                                         </div>
                                         <div class="row" style="display: {{sms_or_mail}};">
                                             <p class="center-align">Lütfen onay yöntemini seçiniz!</p>

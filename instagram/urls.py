@@ -16,5 +16,6 @@ urlpatterns = [
     path('dashboard/',views.dashboard),
     path('unfollow/',views.unfollow),
     path('',views.dashboard),
+    path('create_default_proxy/',views.create_default_proxy),
 
 ]

@@ -21,6 +21,8 @@ from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLogi
 import hashlib
 import string
 import random
+
+
 #from .selenium_insta import this_was_me
 
 
@@ -51,17 +53,26 @@ def from_json(json_object):
         return codecs.decode(json_object['__value__'].encode(), 'base64')
     return json_object
 
+def prepare_proxy_ip(proxy_id):
+    current_proxy = SocinstaProxy.objects.filter(id=proxy_id)[0]
+    if current_proxy.ip_adress == None:
+        return None
+    else:
+        proxy_ip = "https://" + current_proxy.username + ":" + current_proxy.password + "@" + current_proxy.ip_adress + ":" + current_proxy.port
+        return proxy_ip
+
+        
 
 
-def check_is_real(main_user,username, password,challenge_code,sms_or_mail):
+
+
+def check_is_real(main_user,username, password,challenge_code,sms_or_mail,proxy_id):
     if username == "" or password == "":
         return 10
     elif sms_or_mail == 2:
         try:
-            new_api = Client(username = username, password = password,proxy="https://wahow:i159753@64.227.107.38:3128")
+            new_api = Client(username = username, password = password,proxy=prepare_proxy_ip(proxy_id))
             deneme = new_api.username_info(username)
-            print(deneme)
-            print("oğğğğğğğğ")
             return new_api
         except Exception as e:
             if e.args[0] == "invalid_user":
@@ -76,14 +87,16 @@ def check_is_real(main_user,username, password,challenge_code,sms_or_mail):
                 return 6
             elif e.args[0] == "rate_limit_error":
                 return 11
+            elif e.args[0] == "Please wait a few minutes before you try again":
+                return 3
             print(e.args[0],"jajdajsdj")
     else:
         if challenge_code == 2:
-            new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy="https://wahow:i159753@64.227.107.38:3128")
+            new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy=prepare_proxy_ip(proxy_id))
             return 8
         else:
             try:
-                new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy="https://wahow:i159753@64.227.107.38:3128")
+                new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy=prepare_proxy_ip(proxy_id))
                 deneme = new_api.username_info(username)
                 return new_api
             except urllib.error.HTTPError as err:
@@ -124,7 +137,7 @@ def create_cookie(cache_settings, username,rank_token):
     new_settings.save()
 
 def login_instagram_web_api(username,password):
-
+    proxy_id = Instagram_Accounts.objects.filter(username=username)[0].current_proxy.id
     class MyClient(instagram_web_api.Client):
 
         @staticmethod
@@ -161,7 +174,7 @@ def login_instagram_web_api(username,password):
     try:
         if len(api_settings) == 0:
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,proxy="https://wahow:i159753@64.227.107.38:3128")
+    username=username, password=password,proxy=prepare_proxy_ip(proxy_id))
             create_cookie_web_api(api.settings, username)
         else:
             settings = api_settings[0].settings
@@ -169,23 +182,24 @@ def login_instagram_web_api(username,password):
             settings = json.loads(settings)
             settings["cookie"] = cookie
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,settings = settings,proxy="https://wahow:i159753@64.227.107.38:3128")
+    username=username, password=password,settings = settings,proxy=prepare_proxy_ip(proxy_id))
     except:
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
         api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,proxy="https://wahow:i159753@64.227.107.38:3128")
+    username=username, password=password,proxy=prepare_proxy_ip(proxy_id))
         create_cookie_web_api(api, username)
 
     return api
 
 def login_instagram(username, password):
+    proxy_id = Instagram_Accounts.objects.filter(username=username)[0].current_proxy.id
     device_id = None
     api_settings = Api_Settings.objects.filter(instagram_account__username=username)
     try:
         if len(api_settings) == 0:
-            api = Client(username, password,proxy="https://wahow:i159753@64.227.107.38:3128")
+            api = Client(username, password,proxy=prepare_proxy_ip(proxy_id))
             rank_token = Client.generate_uuid()
             create_cookie(api.settings, username, rank_token)
 
@@ -197,7 +211,7 @@ def login_instagram(username, password):
             device_id = settings.get('device_id')
             api = Client(
                 username, password,
-                settings=settings,proxy="https://wahow:i159753@64.227.107.38:3128")
+                settings=settings,proxy=prepare_proxy_ip(proxy_id))
 
     except (ClientCookieExpiredError, ClientLoginRequiredError) as e:
         print('ClientCookieExpiredError/ClientLoginRequiredError: {0!s}'.format(e))
@@ -205,7 +219,7 @@ def login_instagram(username, password):
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
-        api = Client(username, password, device_id=device_id,proxy="https://wahow:i159753@64.227.107.38:3128")
+        api = Client(username, password, device_id=device_id,proxy=prepare_proxy_ip(proxy_id))
         rank_token = Client.generate_uuid()
         create_cookie(api, username,rank_token)
 

@@ -3,6 +3,18 @@ from aristo.models import *
 
 # Create your models here.
 
+
+class SocinstaProxy(models.Model):
+    ip_adress = models.CharField(verbose_name="Proxy IP Adress",max_length=200,null=True)
+    username = models.CharField(verbose_name="proxy username",max_length=200,null=True)
+    password = models.CharField(verbose_name="proxy passoword",max_length=200,null=True)
+    created_date = models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
+    location = models.CharField(verbose_name="Location",max_length=200,default="Amsterdam")
+    port = models.CharField(verbose_name="Port",max_length=200,null=True)
+    def __str__(self):
+        return self.location
+
+
 class Instagram_Accounts(models.Model):
     """Keeps Instagram Account's basic informations such as username and password."""
     main_user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
@@ -16,10 +28,10 @@ class Instagram_Accounts(models.Model):
     is_business = models.CharField(max_length=200, verbose_name="is_business", null=True)
     is_current_account=models.IntegerField(verbose_name="is current account",null=True)
     update_time = models.DateTimeField(auto_now_add=True,verbose_name="update_time",null=True)
-
-    
+    current_proxy = models.ForeignKey(SocinstaProxy,on_delete=models.CASCADE,null=True)
     def __str__(self):
         return self.username
+
 
 
 class Instagram_Accounts_Analyse(models.Model):
@@ -291,3 +303,23 @@ class Volta(models.Model):
 
 
 
+
+class Instagram_Apı_Constants(models.Model):
+    ig_sig_key = models.CharField(verbose_name="IG signature key",max_length=300,default='19ce5f445dbfd9d29c59dc2a78c616a7fc090a8e018b9267bc4240a30244c53b')
+    ig_capabilites = models.CharField(verbose_name="IG capabilites",max_length=300,default='3brTvw==')
+    sig_key_version = models.CharField(verbose_name="Signature key version",max_length=100,default="4")
+    app_version = models.CharField(verbose_name="App version",max_length=100,default='76.0.0.15.395')
+    application_id = models.CharField(verbose_name="Application id",max_length=200,default='567067343352427')
+    fb_http_engine = models.CharField(verbose_name="Fb http engine",max_length=200,default='Liger')
+    android_version = models.IntegerField(verbose_name="Android version",default=24)
+    android_relase = models.CharField(verbose_name="Android relase",max_length=200,default='7.0')
+    phone_manufacturer = models.CharField(verbose_name="Phone Manufacturer",max_length=200,default='samsung')
+    phone_device = models.CharField(verbose_name="Phone Device",max_length=200,default='SM-G930F')
+    phone_model = models.CharField(verbose_name="Phone Model",max_length=200,default='herolte')
+    phone_dpi = models.CharField(verbose_name="Phone DPI",max_length=200,default='640dpi')
+    phone_resolution = models.CharField(verbose_name="Phone Resolution",max_length=200,default='1440x2560')
+    phone_chipset = models.CharField(verbose_name="Phone Chipset",max_length=200,default='samsungexynos8890')
+    version_code = models.CharField(verbose_name="Version code",max_length=200,default='138226743')
+
+    def __str__(self):
+        return self.phone_manufacturer

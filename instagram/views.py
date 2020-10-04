@@ -134,6 +134,7 @@ def add_insta_account(request):
         user = User.objects.get(username = request.user)
         check_license = License.objects.filter(main_user__username = request.user)[0]
         account_limit = check_license.package.account_count
+        all_proxies = SocinstaProxy.objects.filter()
         if user.is_active == False:
             return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error(' Lütfen hesap eklemek için mailinizden hesabınızı onaylayın')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
         elif account_limit == 0:
@@ -145,13 +146,16 @@ def add_insta_account(request):
             
         username=request.POST["instagram_username"]
         password=request.POST["instagram_password"]
+        selected_proxy_id = request.POST['selected_proxy_id']
+        
+        current_proxy = SocinstaProxy.objects.filter(id=selected_proxy_id)
         challenge_user = Challenge_User.objects.filter(username = username)
         if len(challenge_user) == 0:
             challenge_user = Challenge_User(username = username,main_user=request.user,password = password)
             challenge_user.save()
-        else:
-            challenge_user = challenge_user[0]
-        
+
+        challenge_user = Challenge_User.objects.filter(username = username)[0]
+
         if challenge_user.sms_or_mail == 2:
             challenge_required_mail = request.POST.get("mail")
             challenge_required_sms = request.POST.get("sms")
@@ -167,6 +171,9 @@ def add_insta_account(request):
         else:
             pass
         challenge_user.save()
+
+        challenge_user = Challenge_User.objects.filter(username = username)[0]
+
         challenge_code = request.POST["challenge_code"]
         if challenge_code == "0":
             challenge_user.delete()
@@ -185,7 +192,7 @@ def add_insta_account(request):
             sms_or_mail = challenge_user.sms_or_mail
             challenge_user.save()
             #check_is_real Authentication da hatası verebilir. 
-            check_user=private_api.check_is_real(request.user,username,password,challenge_code = challenge_code,sms_or_mail = sms_or_mail)
+            check_user=private_api.check_is_real(request.user,username,password,challenge_code = challenge_code,sms_or_mail = sms_or_mail,proxy_id=selected_proxy_id)
             if check_user == None:
                 check_user = 11
             if type(check_user) != int:
@@ -205,7 +212,7 @@ def add_insta_account(request):
                 Instagram_Accounts.objects.filter(main_user=request.user).update(is_current_account=0)
                 New_IG_Account=Instagram_Accounts(main_user=request.user,username=username,password=password,is_current_account=1,user_pk=user_pk,
                 full_name = full_name,is_private=is_private,
-                biography = biography,is_business = is_business,profile_pic_url = profile_pic_url)       
+                biography = biography,is_business = is_business,profile_pic_url = profile_pic_url,current_proxy=current_proxy[0])       
                 New_IG_Account.save()
 
                 private_api.create_cookie(api.settings, username, rank_token)
@@ -223,37 +230,36 @@ def add_insta_account(request):
                 
                 #!!!! return'lar düzenlenecek! 
                 ig_accounts_list=functions.get_linked_accounts(request.user)
-
-                return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","pop_up":"add_insta_account_success('Hesap başarıyla eklendi')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"none","wow2":"block","challenge_code":"none","pop_up":"add_insta_account_success('Hesap başarıyla eklendi')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
 
             #Hesap eklerken lazım olacak doğrulama işlerini de bu fonksiyonda halledelim.
             elif check_user == 1:
                 challenge_user.delete()
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Böyle bir kullanıcı bulunamadı.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Böyle bir kullanıcı bulunamadı.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 2:
                 challenge_user.delete()
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Yanlış şifre!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Yanlış şifre!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 3:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen 1 saat bekleyip yeniden deneyin!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen 1 saat bekleyip yeniden deneyin!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 4:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen instagrama girerek gerçekleştiren eylemi ben yaptım seçeneğini işaretleyiniz')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen instagrama girerek gerçekleştiren eylemi ben yaptım seçeneğini işaretleyiniz')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 5:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Lütfen telefonunza yada mailinize gelin kodu doğru bir şekilde giriniz!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"none","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Lütfen telefonunza yada mailinize gelin kodu doğru bir şekilde giriniz!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"none","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
             elif check_user == 6:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen hesabınızı onaylama yönteminiz seçiniz!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"block","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"current_proxy":current_proxy,"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen hesabınızı onaylama yönteminiz seçiniz!')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"block","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
             elif check_user == 7:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Bilinmeyen hata')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Bilinmeyen hata')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 8:
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Lütfen gelen kodu giriniz eğer kod gelmediyse(5dk ya kadar kod gelmesi gecikebilir) yada yanlış onay çeşidini seçtiyseniz onay kodu yerine 0 yazıp onaylayın ve daha sonra yeniden deneyin')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"none","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"current_proxy":current_proxy,"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"block","pop_up":"add_insta_account_error('Lütfen gelen kodu giriniz eğer kod gelmediyse(5dk ya kadar kod gelmesi gecikebilir) yada yanlış onay çeşidini seçtiyseniz onay kodu yerine 0 yazıp onaylayın ve daha sonra yeniden deneyin')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"none","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
             elif check_user == 9:
                 challenge_user.delete()
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen farklı bir onay yöntemi deneyiniz.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"block","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen farklı bir onay yöntemi deneyiniz.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"none","ig_username_disabled":"block","sms_or_mail":"block","ig_user":username,"ig_user_password":password,"license_data":functions.license_data(request.user)})
             elif check_user == 10:
                 challenge_user.delete()
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen boş yerleri doldurun.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Lütfen boş yerleri doldurun.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
             elif check_user == 11:
                 challenge_user.delete()
-                return render(request,"profile.html",{"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Çok fazla deneme yaptınız, lütfen daha sonra yeniden deneyiniz.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+                return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Çok fazla deneme yaptınız, lütfen daha sonra yeniden deneyiniz.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
 
 
 
@@ -269,11 +275,12 @@ def add_insta_account(request):
 def profile(request):
     instagram_accounts=functions.get_linked_accounts(request.user)
     check_linked_assistants_list=functions.check_linked_assistans(request.user)
+    all_proxies = SocinstaProxy.objects.all()
     try:
         license_datas = functions.license_data(request.user)
     except:
         license_datas = 0
-    return render(request,"profile.html",{"wow":"none","wow2":"block","challenge_code":"none","user":request.user,"ig_accounts":instagram_accounts,"number":len(instagram_accounts),"assistants_list":check_linked_assistants_list,"license_data":license_datas,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
+    return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"none","wow2":"block","challenge_code":"none","user":request.user,"ig_accounts":instagram_accounts,"number":len(instagram_accounts),"assistants_list":check_linked_assistants_list,"license_data":license_datas,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none"})
 
 
 #Asssistant Views
@@ -621,3 +628,11 @@ def unfollow(request):
                 return render(request,"unfollow.html",{"ig_accounts":ig_accounts_list})
             else:
                 return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Asistan zaten aktif!')"})
+
+
+def create_default_proxy(request):
+    if len(SocinstaProxy.objects.all()) == 0:
+        new_proxy = SocinstaProxy(created_date=datetime.now(timezone.utc))
+        new_proxy.save()
+    else:
+        pass
