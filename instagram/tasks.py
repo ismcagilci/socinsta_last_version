@@ -156,19 +156,23 @@ def check_assistant_is_ready(assistant_id):
 
     # Son işlem başarılıysa geçen süreye bakar.
     if len(action_name.objects.filter(assistant=assistant).order_by('-update_time'))==0: 
+        print("oğ1")
         return True
 
     latest_actions = action_name.objects.filter(assistant=assistant).order_by('-update_time')[0]
     if latest_actions.status == 1:
         random_waiting = random.randint(1, 5)
         if (datetime.now(timezone.utc) - latest_actions.update_time).seconds < desired_wait + random_waiting:
+            print("oğ2")
             return False
 
     # Son 1 saatte maksimum hata sınırı aşıldıysa False döner.
-    if len(action_name.objects.filter(status=2).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) +\
-            len(action_name.objects.filter(status=3).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1)))>= hourly_error_limit:
+    if len(action_name.objects.filter(status=2,assistant=assistant).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) +\
+            len(action_name.objects.filter(status=3,assistant=assistant).exclude(update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1)))>= hourly_error_limit:
+        print("oğ3")
         return False
     else:
+        print("oğ4")
         return True
 
 @shared_task
@@ -347,10 +351,10 @@ def create_action(assistant_id):
         user_followings = private_api.get_user_followings_simple(assistant_id=assistant_id)
         if user_followings == False:
             pass
-        elif len(user_followings) == len(check_unfollow_action):
-            active_assistant.number_of_actions = new_noa
-            active_assistant.update_time = datetime.now(timezone.utc)
-            active_assistant.save()
+        # elif len(user_followings) == len(check_unfollow_action):
+        #     active_assistant.number_of_actions = new_noa
+        #     active_assistant.update_time = datetime.now(timezone.utc)
+        #     active_assistant.save()
         else:
             for i in user_followings:
                 check_ig_user = IG_Users.objects.filter(username=i.get("username"))
@@ -384,7 +388,8 @@ def create_action(assistant_id):
             for i in check_unfollow_action:
                 if i.status == 9 or i.status == 0:
                     new_noa += 1
-            active_assistant.number_of_actions = new_noa
+            if active_assistant.number_of_actions > new_noa:
+                active_assistant.number_of_actions = new_noa
             active_assistant.update_time = datetime.now(timezone.utc)
             active_assistant.save()
 
@@ -545,7 +550,8 @@ def volta():
                         executioner.apply_async(queue="deneme1", args=[i.id])
                     else:
                         prepare_filtered_users.apply_async(queue="deneme1", args=[i.id])
-
+        else:
+            print("{} asistanı hazır değil".format(i))
 
 """Analyse Functions"""
 @shared_task

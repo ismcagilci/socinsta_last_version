@@ -247,16 +247,16 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
         if not mobj:
             raise ValueError('User-agent specified does not fit format required: {0!s}'.format(
                 Constants.USER_AGENT_EXPRESSION))
-        self.app_version = mobj.group('app_version')
-        self.android_release = mobj.group('android_release')
-        self.android_version = int(mobj.group('android_version'))
-        self.phone_manufacturer = mobj.group('manufacturer')
-        self.phone_device = mobj.group('device')
-        self.phone_model = mobj.group('model')
-        self.phone_dpi = mobj.group('dpi')
-        self.phone_resolution = mobj.group('resolution')
-        self.phone_chipset = mobj.group('chipset')
-        self.version_code = mobj.group('version_code')
+        self.app_version = value.get('app_version')
+        self.android_release = value.get('android_release')
+        self.android_version = int(value.get('android_version'))
+        self.phone_manufacturer = value.get('manufacturer')
+        self.phone_device = value.get('device')
+        self.phone_model = value.get('model')
+        self.phone_dpi = value.get('dpi')
+        self.phone_resolution = value.get('resolution')
+        self.phone_chipset = value.get('chipset')
+        self.version_code = value.get('version_code')
 
     @staticmethod
     def generate_useragent(**kwargs):
@@ -301,16 +301,16 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
                 'User-agent specified does not fit format required: {0!s}'.format(
                     Constants.USER_AGENT_EXPRESSION))
         parse_params = {
-            'app_version': mobj.group('app_version'),
-            'android_version': int(mobj.group('android_version')),
-            'android_release': mobj.group('android_release'),
-            'brand': mobj.group('manufacturer'),
-            'device': mobj.group('device'),
-            'model': mobj.group('model'),
-            'dpi': mobj.group('dpi'),
-            'resolution': mobj.group('resolution'),
-            'chipset': mobj.group('chipset'),
-            'version_code': mobj.group('version_code'),
+            'app_version': value.get('app_version'),
+            'android_version': int(value.get('android_version')),
+            'android_release': value.get('android_release'),
+            'brand': value.get('manufacturer'),
+            'device': value.get('device'),
+            'model': value.get('model'),
+            'dpi': value.get('dpi'),
+            'resolution': value.get('resolution'),
+            'chipset': value.get('chipset'),
+            'version_code': value.get('version_code'),
         }
         return {
             'user_agent': Constants.USER_AGENT_FORMAT.format(**parse_params),

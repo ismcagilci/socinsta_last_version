@@ -118,8 +118,12 @@ def check_is_real(main_user,username, password,challenge_code,sms_or_mail,proxy_
             print(e.args[0],"jajdajsdj")
     else:
         if challenge_code == 2:
-            new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy=prepare_proxy_ip(proxy_id))
-            return 8
+            try:
+                new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy=prepare_proxy_ip(proxy_id))
+                return 8
+            except Exception as e:
+                return 3
+
         else:
             try:
                 new_api = MyAppClient(username = username, password = password, challenge_code = challenge_code,sms_or_mail=sms_or_mail,proxy=prepare_proxy_ip(proxy_id))
