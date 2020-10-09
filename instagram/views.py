@@ -275,6 +275,9 @@ def add_insta_account(request):
 def profile(request):
     instagram_accounts=functions.get_linked_accounts(request.user)
     check_linked_assistants_list=functions.check_linked_assistans(request.user)
+    if len(SocinstaProxy.objects.all()) == 0:
+        new_proxy = SocinstaProxy(created_date=datetime.now(timezone.utc))
+        new_proxy.save()
     all_proxies = SocinstaProxy.objects.all()
     try:
         license_datas = functions.license_data(request.user)
@@ -629,10 +632,4 @@ def unfollow(request):
             else:
                 return render(request,"assistant_type.html",{"ig_accounts":ig_accounts_list,"popup_message":"relationship_error('Asistan zaten aktif!')"})
 
-
-def create_default_proxy(request):
-    if len(SocinstaProxy.objects.all()) == 0:
-        new_proxy = SocinstaProxy(created_date=datetime.now(timezone.utc))
-        new_proxy.save()
-    else:
-        pass
+    

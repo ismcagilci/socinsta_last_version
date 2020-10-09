@@ -3,7 +3,6 @@ from aristo.models import *
 
 # Create your models here.
 
-
 class SocinstaProxy(models.Model):
     ip_adress = models.CharField(verbose_name="Proxy IP Adress",max_length=200,null=True)
     username = models.CharField(verbose_name="proxy username",max_length=200,null=True)
@@ -31,6 +30,36 @@ class Instagram_Accounts(models.Model):
     current_proxy = models.ForeignKey(SocinstaProxy,on_delete=models.CASCADE,null=True)
     def __str__(self):
         return self.username
+
+class Instagram_Apı_Settings(models.Model):
+    instagram_account=models.ForeignKey(Instagram_Accounts,on_delete=models.CASCADE,null=True)
+    ig_sig_key = models.CharField(verbose_name="IG signature key",max_length=300,default='19ce5f445dbfd9d29c59dc2a78c616a7fc090a8e018b9267bc4240a30244c53b')
+    ig_capabilites = models.CharField(verbose_name="IG capabilites",max_length=300,default='3brTvw==')
+    sig_key_version = models.CharField(verbose_name="Signature key version",max_length=100,default="4")
+    application_id = models.CharField(verbose_name="Application id",max_length=200,default='567067343352427')
+    fb_http_engine = models.CharField(verbose_name="Fb http engine",max_length=200,default='Liger')
+    
+    def __str__(self):
+        return self.phone_manufacturer
+
+class Instagram_Api_User_Agent(models.Model):
+    instagram_account=models.ForeignKey(Instagram_Accounts,on_delete=models.CASCADE,null=True)
+    android_version = models.IntegerField(verbose_name="Android version",default=24)
+    android_relase = models.CharField(verbose_name="Android relase",max_length=200,default='7.0')
+    phone_manufacturer = models.CharField(verbose_name="Phone Manufacturer",max_length=200,default='samsung')
+    phone_device = models.CharField(verbose_name="Phone Device",max_length=200,default='SM-G930F')
+    phone_model = models.CharField(verbose_name="Phone Model",max_length=200,default='herolte')
+    phone_dpi = models.CharField(verbose_name="Phone DPI",max_length=200,default='640dpi')
+    phone_resolution = models.CharField(verbose_name="Phone Resolution",max_length=200,default='1440x2560')
+    phone_chipset = models.CharField(verbose_name="Phone Chipset",max_length=200,default='samsungexynos8890')
+    version_code = models.CharField(verbose_name="Version code",max_length=200,default='138226743')
+    app_version = models.CharField(verbose_name="App version",max_length=100,default='76.0.0.15.395')
+
+    def __str__(self):
+        return self.instagram_account.username    
+
+
+
 
 
 
@@ -304,22 +333,3 @@ class Volta(models.Model):
 
 
 
-class Instagram_Apı_Constants(models.Model):
-    ig_sig_key = models.CharField(verbose_name="IG signature key",max_length=300,default='19ce5f445dbfd9d29c59dc2a78c616a7fc090a8e018b9267bc4240a30244c53b')
-    ig_capabilites = models.CharField(verbose_name="IG capabilites",max_length=300,default='3brTvw==')
-    sig_key_version = models.CharField(verbose_name="Signature key version",max_length=100,default="4")
-    app_version = models.CharField(verbose_name="App version",max_length=100,default='76.0.0.15.395')
-    application_id = models.CharField(verbose_name="Application id",max_length=200,default='567067343352427')
-    fb_http_engine = models.CharField(verbose_name="Fb http engine",max_length=200,default='Liger')
-    android_version = models.IntegerField(verbose_name="Android version",default=24)
-    android_relase = models.CharField(verbose_name="Android relase",max_length=200,default='7.0')
-    phone_manufacturer = models.CharField(verbose_name="Phone Manufacturer",max_length=200,default='samsung')
-    phone_device = models.CharField(verbose_name="Phone Device",max_length=200,default='SM-G930F')
-    phone_model = models.CharField(verbose_name="Phone Model",max_length=200,default='herolte')
-    phone_dpi = models.CharField(verbose_name="Phone DPI",max_length=200,default='640dpi')
-    phone_resolution = models.CharField(verbose_name="Phone Resolution",max_length=200,default='1440x2560')
-    phone_chipset = models.CharField(verbose_name="Phone Chipset",max_length=200,default='samsungexynos8890')
-    version_code = models.CharField(verbose_name="Version code",max_length=200,default='138226743')
-
-    def __str__(self):
-        return self.phone_manufacturer

@@ -60,6 +60,32 @@ def prepare_proxy_ip(proxy_id):
     else:
         proxy_ip = "https://" + current_proxy.username + ":" + current_proxy.password + "@" + current_proxy.ip_adress + ":" + current_proxy.port
         return proxy_ip
+#Not ready
+def prepare_api_settings(username):
+    current_ig_accout = Instagram_Accounts.objects.filter(username=username)[0]
+    instagram_api_settings = Instagram_Apı_Settings.objects.filter()
+    if len(instagram_api_settings) == 0:
+        new_settings = Instagram_Apı_Settings(instagram_account=current_ig_accout)
+        new_settings.save()
+    instagram_api_settings = Instagram_Apı_Settings.objects.filter(instagram_account = current_ig_accout )[0]
+    prepare_api_settings = {"signature_key":instagram_api_settings.ig_sig_key,"key_version":instagram_api_settings.sig_key_version,"ig_capabilities":instagram_api_settings.ig_capabilites,
+    "application_id":instagram_api_settings.application_id}
+    return prepare_api_settings
+
+def prepare_user_agent(username):
+    current_ig_account = Instagram_Accounts.objects.filter(username=username)[0]
+    instagram_api_user_agent = Instagram_Api_User_Agent.objects.filter(instagram_account=current_ig_account)
+    if len(instagram_api_user_agent) == 0:
+        new_user_agent = Instagram_Api_User_Agent(instagram_account=current_ig_account)
+        new_user_agent.save()
+    instagram_api_user_agent = Instagram_Api_User_Agent.objects.filter(instagram_account=current_ig_account)[0]
+    user_agent_data = {"app_version":instagram_api_user_agent.app_version,"android_relase":instagram_api_user_agent.android_relase,"android_version":instagram_api_user_agent.android_version,
+    "phone_manufacturer":instagram_api_user_agent.phone_manufacturer,"phone_device":instagram_api_user_agent.phone_device,"phone_model":instagram_api_user_agent.phone_model,
+    "phone_dpi":instagram_api_user_agent.phone_dpi,"phone_resolution":instagram_api_user_agent.phone_resolution,"phone_chipset":instagram_api_user_agent.phone_chipset,
+    "version_code":instagram_api_user_agent.version_code}
+    return user_agent_data
+
+
 
         
 
@@ -174,7 +200,7 @@ def login_instagram_web_api(username,password):
     try:
         if len(api_settings) == 0:
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,proxy=prepare_proxy_ip(proxy_id))
+    username=username, password=password,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
             create_cookie_web_api(api.settings, username)
         else:
             settings = api_settings[0].settings
@@ -182,13 +208,13 @@ def login_instagram_web_api(username,password):
             settings = json.loads(settings)
             settings["cookie"] = cookie
             api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,settings = settings,proxy=prepare_proxy_ip(proxy_id))
+    username=username, password=password,settings = settings,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
     except:
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
         api = MyClient(auto_patch=True, authenticate=True,
-    username=username, password=password,proxy=prepare_proxy_ip(proxy_id))
+    username=username, password=password,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
         create_cookie_web_api(api, username)
 
     return api
@@ -199,7 +225,7 @@ def login_instagram(username, password):
     api_settings = Api_Settings.objects.filter(instagram_account__username=username)
     try:
         if len(api_settings) == 0:
-            api = Client(username, password,proxy=prepare_proxy_ip(proxy_id))
+            api = Client(username, password,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
             rank_token = Client.generate_uuid()
             create_cookie(api.settings, username, rank_token)
 
@@ -211,7 +237,7 @@ def login_instagram(username, password):
             device_id = settings.get('device_id')
             api = Client(
                 username, password,
-                settings=settings,proxy=prepare_proxy_ip(proxy_id))
+                settings=settings,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
 
     except (ClientCookieExpiredError, ClientLoginRequiredError) as e:
         print('ClientCookieExpiredError/ClientLoginRequiredError: {0!s}'.format(e))
@@ -219,7 +245,7 @@ def login_instagram(username, password):
         # Login expired
         # Do relogin but use default ua, keys and such
         Api_Settings.objects.filter(instagram_account__username=username).delete()
-        api = Client(username, password, device_id=device_id,proxy=prepare_proxy_ip(proxy_id))
+        api = Client(username, password, device_id=device_id,proxy=prepare_proxy_ip(proxy_id),user_agent = prepare_user_agent(username))
         rank_token = Client.generate_uuid()
         create_cookie(api, username,rank_token)
 

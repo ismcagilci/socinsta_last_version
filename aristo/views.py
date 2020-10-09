@@ -190,6 +190,7 @@ def forget_password(request):
         return render(request,"forget_password.html",{"x":"none"})
 
 def landing(request):
+
     return render(request,"landing.html")
 
 def about(request):

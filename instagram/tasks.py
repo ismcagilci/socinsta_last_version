@@ -695,31 +695,33 @@ def analyse_ig_account(username):
                 Analyse = Analyse_FF(instagram_account=instagram_account, ig_user=user_object, is_following=1,
                                      is_follower=0, following_update_time=datetime.now(timezone.utc))
                 Analyse.save()
+
+            # New unFF's
+            followers_list = []
+            followings_list = []
+
+            for i in user_followers:
+                followers_list.append(i.get('username'))
+            for i in user_followings:
+                followings_list.append(i.get('username'))
+
+            for i in Analyse_FF.objects.filter(instagram_account=instagram_account, is_follower=1):
+                if not i.ig_user.username in followers_list:
+                    i.is_follower = 2
+                    i.follower_update_time = datetime.now(timezone.utc)
+                    i.save()
+            for i in Analyse_FF.objects.filter(instagram_account=instagram_account, is_following=1):
+                if not i.ig_user.username in followings_list:
+                    i.is_following = 2
+                    i.following_update_time = datetime.now(timezone.utc)
+                    i.save()
     except Exception as e:
         active_ig_account = Instagram_Accounts.objects.filter(username=username)[0]
         api_error = Api_Error(instagram_account=active_ig_account, error_action_type=15, api_error_mean=str(e),
                               error_source="analyse ig account")
         api_error.save()
 
-    # New unFF's
-    followers_list = []
-    followings_list = []
-
-    for i in user_followers:
-        followers_list.append(i.get('username'))
-    for i in user_followings:
-        followings_list.append(i.get('username'))
-
-    for i in Analyse_FF.objects.filter(instagram_account=instagram_account, is_follower=1):
-        if not i.ig_user.username in followers_list:
-            i.is_follower = 2
-            i.follower_update_time = datetime.now(timezone.utc)
-            i.save()
-    for i in Analyse_FF.objects.filter(instagram_account=instagram_account, is_following=1):
-        if not i.ig_user.username in followings_list:
-            i.is_following = 2
-            i.following_update_time = datetime.now(timezone.utc)
-            i.save()
+    
 
 
 @task
