@@ -16,8 +16,8 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 from django.contrib.auth.models import User
 from .challenge_required import (MyAppClient)
-import instagram_web_api
-from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
+# import instagram_web_api
+# from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
 import hashlib
 import string
 import random
