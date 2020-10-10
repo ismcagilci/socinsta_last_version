@@ -408,7 +408,8 @@ def check_user_actions(raw_results, assistant_id):
         action_name = Like_Actions
     else:
         action_name = Comment_Actions
-    
+
+    all_api_errors = Api_Error.objects.filter(instagram_account = instagram_account).order_by('-update_time')
     results = raw_results.get("users")
     if bool(results) == False:
         results = raw_results.get("comments")
@@ -416,7 +417,6 @@ def check_user_actions(raw_results, assistant_id):
             pass
         else:
             for i in results:
-                all_api_errors = Api_Error.objects.filter(assistant__instagram_account__username = assistant.instagram_account.username).order_by('-update_time')
                 if len(all_api_errors) == 0:
                     i = i.get("user")
                     actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
@@ -432,7 +432,7 @@ def check_user_actions(raw_results, assistant_id):
                                 new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                                 new_action.save()
                         except Exception as e:
-                            api_error = Api_Error(instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
+                            api_error = Api_Error(assistant=assistant,instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
                             api_error.save()
                     else:
                         pass
@@ -454,7 +454,7 @@ def check_user_actions(raw_results, assistant_id):
                                     new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
                                     new_action.save()
                             except Exception as e:
-                                api_error = Api_Error(instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
+                                api_error = Api_Error(assistant=assistant,instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
                                 api_error.save()
                         else:
                             pass
@@ -463,7 +463,6 @@ def check_user_actions(raw_results, assistant_id):
 
     else:
         for i in results:
-            all_api_errors = Api_Error.objects.filter(assistant__instagram_account__username = assistant.instagram_account.username).order_by('-update_time')
             if len(all_api_errors) == 0:
                 actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
                 if actions_count == 0:
