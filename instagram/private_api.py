@@ -393,7 +393,6 @@ def update_ig_user(pk_number,api):
 
 #Check repeated actions and make them unique
 def check_user_actions(raw_results, assistant_id):
-    
     assistant = Assistants.objects.filter(id=assistant_id)[0]
     assistant_type = assistant.assistant_type
     instagram_account = assistant.instagram_account
@@ -409,7 +408,7 @@ def check_user_actions(raw_results, assistant_id):
     else:
         action_name = Comment_Actions
 
-    all_api_errors = Api_Error.objects.filter(instagram_account = instagram_account).order_by('-update_time')
+    # all_api_errors = Api_Error.objects.filter(instagram_account = instagram_account).order_by('-update_time')
     results = raw_results.get("users")
     if bool(results) == False:
         results = raw_results.get("comments")
@@ -417,7 +416,7 @@ def check_user_actions(raw_results, assistant_id):
             pass
         else:
             for i in results:
-                if len(all_api_errors) == 0:
+                if check_instagram_account_is_ready(instagram_account.username) == True:
                     i = i.get("user")
                     actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
                     if actions_count == 0:
@@ -437,33 +436,10 @@ def check_user_actions(raw_results, assistant_id):
                     else:
                         pass
                 else:
-                    error_count = len(all_api_errors)
-                    passing_time = (datetime.now(timezone.utc)-all_api_errors[0].update_time).seconds
-                    if passing_time >= error_count*360:
-                        i = i.get("user")
-                        actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
-                        if actions_count == 0:
-                            user_pk = i.get("pk")
-                            api = login_with_assistant(assistant_id)
-                            try:
-                                friendship_status = api.friendships_show(user_pk)
-                                if friendship_status.get("following") == True or friendship_status.get("followed_by") == True:
-                                    pass
-                                else:
-                                    user = create_ig_user(i)
-                                    new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
-                                    new_action.save()
-                            except Exception as e:
-                                api_error = Api_Error(assistant=assistant,instagram_account = instagram_account,error_action_type = 5,api_error_mean = str(e),error_source = "check_user_actions")
-                                api_error.save()
-                        else:
-                            pass
-                    else:
-                        pass
-
+                    pass
     else:
         for i in results:
-            if len(all_api_errors) == 0:
+            if check_instagram_account_is_ready(instagram_account.username) == True:
                 actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
                 if actions_count == 0:
                     user_pk = i.get("pk")
@@ -482,28 +458,9 @@ def check_user_actions(raw_results, assistant_id):
                 else:
                     pass
             else:
-                error_count = len(all_api_errors)
-                passing_time = (datetime.now(timezone.utc)-all_api_errors[0].update_time).seconds
-                if passing_time >= error_count*360:
-                    actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
-                    if actions_count == 0:
-                        user_pk = i.get("pk")
-                        api = login_with_assistant(assistant_id)
-                        try:
-                            friendship_status = api.friendships_show(user_pk)
-                            if friendship_status.get("following") == True or friendship_status.get("followed_by") == True:
-                                pass
-                            else:
-                                user = create_ig_user(i)
-                                new_action = action_name(instagram_account=instagram_account,assistant=assistant,ig_user=user,source=source,relationship=relationship,source_type=source_type,status=0,update_time=datetime.now(timezone.utc))
-                                new_action.save()
-                        except Exception as e:
-                            api_error = Api_Error(instagram_account = instagram_account,error_action_type = 4,api_error_mean = str(e),error_source = "check_user_actions2")
-                            api_error.save()
-                    else:
-                        pass
-                else:
-                    pass
+                pass
+
+               
 
 
                 
