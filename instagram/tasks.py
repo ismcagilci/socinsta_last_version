@@ -744,7 +744,7 @@ def Analyse_Beat():
             print("Analize gönderiliyor")
             if len(iaa) == 0:
                 analyse_ig_account.apply_async(queue="deneme1", args=[i.username])
-            elif datetime.now(timezone.utc) - iaa.latest("update_time").update_time >= timedelta(hours=1):
+            elif datetime.now(timezone.utc) - iaa.latest("update_time").update_time >= timedelta(hours=24):
                 analyse_ig_account.apply_async(queue="deneme1", args=[i.username])
             else:
                 print("Analiz güncel olduğu için pass geçiliyor ")
