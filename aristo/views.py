@@ -57,11 +57,10 @@ def contact(request):
     if request.POST:
         name = request.POST["name"]
         surname = request.POST["surname"]
-        try:
-            gsm_no = request.POST["gsm_no"]
-        except:
+        gsm_no = request.POST["gsm_no"]
+        print(gsm_no, "jasjfajf")
+        if gsm_no == "":
             gsm_no = 0
-        
         email = request.POST["email"]
         message = request.POST["message"]
         contact_form = Contact_Form(main_user=request.user,gsm_no = gsm_no,email = email,message = message,name = name,surname = surname)
