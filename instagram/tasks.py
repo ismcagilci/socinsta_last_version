@@ -127,7 +127,7 @@ def prepare_filtered_users(assistant_id):
 def check_instagram_account_is_ready(username):
     # İnstagram hesabına bağlı son 1 saat içindeki API Error'ları kontrol eder.
      
-    hourly_account_error_limit = 3 
+    hourly_account_error_limit = 1 
     instagram_account = Instagram_Accounts.objects.filter(username=username)[0]
     if len(Api_Error.objects.filter(instagram_account=instagram_account).exclude(
         update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) >= hourly_account_error_limit: 
@@ -139,7 +139,7 @@ def check_assistant_is_ready(assistant_id):
     # İşlemler arası yeterli süre beklemiş mi kontrol eder.
     # İşlemlerde bir hata var mı yok mu kontrol eder.
     # Tüm şartlar sağlanmış ve yeni işleme hazırsa True döner.
-    hourly_error_limit = 3
+    hourly_error_limit = 1
     
     assistant = Assistants.objects.filter(id=assistant_id)[0]
     assistant_type = assistant.assistant_type

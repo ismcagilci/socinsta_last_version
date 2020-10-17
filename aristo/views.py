@@ -58,7 +58,6 @@ def contact(request):
         name = request.POST["name"]
         surname = request.POST["surname"]
         gsm_no = request.POST["gsm_no"]
-        print(gsm_no, "jasjfajf")
         if gsm_no == "":
             gsm_no = 0
         email = request.POST["email"]
