@@ -198,7 +198,12 @@ def add_insta_account(request):
             if type(check_user) != int:
                 api = check_user
                 rank_token = Client.generate_uuid()
-                info = api.username_info(username)
+                try:
+                    info = api.username_info(username)
+                except:
+                    challenge_user.delete()
+                    return render(request,"profile.html",{"all_proxies":all_proxies,"wow":"block","wow2":"none","challenge_code":"none","pop_up":"add_insta_account_error('Çok fazla deneme yaptınız, lütfen daha sonra yeniden deneyiniz.')","user":request.user,"ig_accounts":ig_accounts_list,"ig_username":"block","ig_username_disabled":"none","sms_or_mail":"none","license_data":functions.license_data(request.user)})
+
                 follower_count = info.get("user").get("follower_count")
                 following_count = info.get("user").get("following_count")
                 post_count = info.get("user").get("media_count")

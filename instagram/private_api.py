@@ -113,7 +113,7 @@ def check_is_real(main_user,username, password,challenge_code,sms_or_mail,proxy_
                 return 6
             elif e.args[0] == "rate_limit_error":
                 return 11
-            elif e.args[0] == "Please wait a few minutes before you try again":
+            elif e.args[0] == "Please wait a few minutes before you try again.":
                 return 3
             print(e.args[0],"jajdajsdj")
     else:
