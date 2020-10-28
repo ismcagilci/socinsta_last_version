@@ -416,7 +416,7 @@ def check_user_actions(raw_results, assistant_id):
             pass
         else:
             for i in results:
-                if check_instagram_account_is_ready(instagram_account.username) == True:
+                if check_instagram_account_is_ready(instagram_account.username,assistant_id) == True:
                     i = i.get("user")
                     actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
                     if actions_count == 0:
@@ -439,7 +439,7 @@ def check_user_actions(raw_results, assistant_id):
                     pass
     else:
         for i in results:
-            if check_instagram_account_is_ready(instagram_account.username) == True:
+            if check_instagram_account_is_ready(instagram_account.username,assistant_id) == True:
                 actions_count = len(action_name.objects.filter(ig_user__username =i.get('username'), instagram_account = instagram_account))
                 if actions_count == 0:
                     user_pk = i.get("pk")

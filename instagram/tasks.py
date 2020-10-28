@@ -124,15 +124,23 @@ def prepare_filtered_users(assistant_id):
     assistant.update_time = datetime.now(timezone.utc)
     assistant.save()
 
-def check_instagram_account_is_ready(username):
+def check_instagram_account_is_ready(username,assistant_id=0):
     # İnstagram hesabına bağlı son 1 saat içindeki API Error'ları kontrol eder.
      
-    hourly_account_error_limit = 1 
-    instagram_account = Instagram_Accounts.objects.filter(username=username)[0]
-    if len(Api_Error.objects.filter(instagram_account=instagram_account).exclude(
-        update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) >= hourly_account_error_limit: 
-        return False 
-    return True
+    hourly_account_error_limit = 1
+    current_assistant = Assistants.objects.filter(id = assistant_id)
+    if len(current_assistant) == 0:
+        current_account = Instagram_Accounts.objects.filter(username = username)[0]
+        if len(Api_Error.objects.filter(instagram_account=current_account).exclude(
+            update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) >= hourly_account_error_limit: 
+            return False 
+        return True
+    else:
+        if len(Api_Error.objects.filter(assistant=current_assistant[0]).exclude(
+            update_time__lt= datetime.now(timezone.utc)-timedelta(hours=1))) >= hourly_account_error_limit: 
+            return False 
+        return True
+
 
 def check_assistant_is_ready(assistant_id):
     # Asistanda yeterince işlem var mı yok mu kontrol eder.
@@ -519,7 +527,7 @@ def volta():
     all_assistants = Assistants.objects.filter(activity_status=1)
     for i in all_assistants:
         # select an assistant from list and check it
-        if check_assistant_is_ready(i.id) and check_instagram_account_is_ready(i.instagram_account.username) is True:
+        if check_assistant_is_ready(i.id) and check_instagram_account_is_ready(i.instagram_account.username,i.id) is True:
             i.activity_status = 9
             i.update_time = datetime.now(timezone.utc)
             i.save()
