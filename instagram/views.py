@@ -34,7 +34,7 @@ def change_active_account(request,username):
     Instagram_Accounts.objects.filter(username=username).update(is_current_account=1)
     return profile(request)
 
-@login_required(login_url='/login/')       
+@login_required(login_url='/landing/')       
 def dashboard(request):
     if request.POST:
         assistant = Assistants.objects.filter(id=request.POST["assistant"])
