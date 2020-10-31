@@ -548,15 +548,19 @@ def get_user_posts(rank_token, username, api, max_id,assistant):
 
 #Get 18 posts of a hashtag
 def get_hashtag_posts(rank_token, hashtag, api, max_id,assistant):
-    try:
-        if bool(max_id) == True:
-            results = api.feed_tag(hashtag,rank_token,next_max_id=max_id)
-        else:
-            results = api.feed_tag(hashtag,rank_token)
-        return results
-    except Exception as e:
-        api_error = Api_Error(instagram_account = assistant.instagram_account,error_action_type = 4,api_error_mean= str(e),error_source = "get_hashtag_posts")
-        api_error.save()
+    instagram_account = assistant.instagram_account
+    if check_instagram_account_is_ready(instagram_account.username,assistant.id) == True:
+        try:
+            if bool(max_id) == True:
+                results = api.feed_tag(hashtag,rank_token,next_max_id=max_id)
+            else:
+                results = api.feed_tag(hashtag,rank_token)
+            return results
+        except Exception as e:
+            api_error = Api_Error(instagram_account = assistant.instagram_account,error_action_type = 4,api_error_mean= str(e),error_source = "get_hashtag_posts")
+            api_error.save()
+            return False
+    else:
         return False
 
 def get_post_likers(next_post_id,api,assistant):
