@@ -1,4 +1,4 @@
-django==2.2
+django
 celery
 git+https://git@github.com/ismcagilci/instagram_private_api
 django_celery_results
